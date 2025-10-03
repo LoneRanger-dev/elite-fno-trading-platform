@@ -1,0 +1,78 @@
+name: Setup Repository Features
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup-features:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Enable Issues
+        uses: peter-evans/enable-github-features@v1
+        with:
+          features: issues
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable Projects
+        uses: peter-evans/enable-github-features@v1
+        with:
+          features: projects
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Project Board
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const projectConfig = {
+              name: 'FnO Trading Platform Development',
+              body: 'Project board for tracking development tasks'
+            };
+            
+            const columnsConfig = [
+              'To Do',
+              'In Progress',
+              'Review',
+              'Done'
+            ];
+            
+            const project = await github.projects.createForRepo({
+              ...context.repo,
+              ...projectConfig
+            });
+            
+            for (const columnName of columnsConfig) {
+              await github.projects.createColumn({
+                project_id: project.data.id,
+                name: columnName
+              });
+            }
+
+      - name: Setup Branch Protection
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const protection = {
+              required_status_checks: {
+                strict: true,
+                contexts: ['test (3.11)', 'test (3.10)', 'test (3.9)']
+              },
+              enforce_admins: false,
+              required_pull_request_reviews: {
+                dismissal_restrictions: {},
+                dismiss_stale_reviews: true,
+                require_code_owner_reviews: true,
+                required_approving_review_count: 1
+              },
+              restrictions: null
+            };
+            
+            await github.repos.updateBranchProtection({
+              ...context.repo,
+              branch: 'main',
+              ...protection
+            });
