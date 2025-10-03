@@ -1,0 +1,28 @@
+name: Branch Protection Rules
+
+rules:
+  - name: Protect main branch
+    pattern: main
+    required_status_checks:
+      strict: true
+      contexts:
+        - "test (3.11)"
+        - "test (3.10)"
+        - "test (3.9)"
+    required_pull_request_reviews:
+      required_approving_review_count: 1
+      dismiss_stale_reviews: true
+      require_code_owner_reviews: true
+    enforce_admins: false
+    restrictions: null
+
+  - name: Protect develop branch
+    pattern: develop
+    required_status_checks:
+      strict: true
+      contexts:
+        - "test (3.11)"
+    required_pull_request_reviews:
+      required_approving_review_count: 1
+    enforce_admins: false
+    restrictions: null

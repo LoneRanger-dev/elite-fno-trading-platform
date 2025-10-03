@@ -1,0 +1,19 @@
+# Global owners
+* @LoneRanger-dev
+
+# Core trading components
+/live_signal_engine.py @LoneRanger-dev
+/market_analysis_engine.py @LoneRanger-dev
+/market_data_provider.py @LoneRanger-dev
+
+# Configuration and security
+/config/ @LoneRanger-dev
+*.env* @LoneRanger-dev
+
+# Documentation
+/docs/ @LoneRanger-dev
+*.md @LoneRanger-dev
+
+# CI/CD and GitHub Actions
+/.github/ @LoneRanger-dev
+/.github/workflows/ @LoneRanger-dev

@@ -1,0 +1,53 @@
+name: FnO Trading Platform Project Board
+type: automated
+description: Project board for managing development tasks and features
+
+columns:
+  - name: To Do
+    type: automated
+    card_types: [note, issue]
+    automation:
+      - trigger: added
+        action: move_to_bottom
+      - trigger: labeled
+        label: backlog
+        action: move
+
+  - name: In Progress
+    type: automated
+    card_types: [note, issue, pull_request]
+    automation:
+      - trigger: pull_request.opened
+        action: move
+      - trigger: issue.assigned
+        action: move
+
+  - name: Review
+    type: automated
+    card_types: [pull_request]
+    automation:
+      - trigger: pull_request.ready_for_review
+        action: move
+
+  - name: Done
+    type: automated
+    card_types: [issue, pull_request]
+    automation:
+      - trigger: pull_request.merged
+        action: move
+      - trigger: issue.closed
+        action: move
+
+labels:
+  - name: bug
+    color: d73a4a
+  - name: enhancement
+    color: 84b6eb
+  - name: documentation
+    color: 0075ca
+  - name: high-priority
+    color: b60205
+  - name: good first issue
+    color: 7057ff
+  - name: help wanted
+    color: 008672
