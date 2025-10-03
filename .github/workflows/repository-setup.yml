@@ -1,0 +1,78 @@
+name: Repository Setup
+
+on:
+  workflow_dispatch:
+
+jobs:
+  configure-environment:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+      security-events: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure Environment
+        env:
+          TELEGRAM_BOT_TOKEN: 8415230764:AAF0Aaqb21Vkq9eWifB_wHDtkm37WrjJRcs
+          KITE_API_KEY: zfz6i2qjh9zjl26m
+          RAZORPAY_KEY_ID: rzp_test_ROCO0lEjsGV5nV
+          FLASK_SECRET_KEY: elite-fno-secret-key-2024
+        run: |
+          echo "Setting up environment variables..."
+          echo "TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN" >> $GITHUB_ENV
+          echo "KITE_API_KEY=$KITE_API_KEY" >> $GITHUB_ENV
+          echo "RAZORPAY_KEY_ID=$RAZORPAY_KEY_ID" >> $GITHUB_ENV
+          echo "FLASK_SECRET_KEY=$FLASK_SECRET_KEY" >> $GITHUB_ENV
+
+      - name: Enable Features
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // Enable issues
+            await github.rest.repos.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              has_issues: true,
+              has_projects: true,
+              has_wiki: true
+            });
+
+            // Create project board
+            const project = await github.rest.projects.createForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'FnO Trading Development',
+              body: 'Main project board for development tracking'
+            });
+
+            // Create columns
+            const columns = ['To Do', 'In Progress', 'Review', 'Done'];
+            for (const column of columns) {
+              await github.rest.projects.createColumn({
+                project_id: project.data.id,
+                name: column
+              });
+            }
+
+            // Set branch protection
+            await github.rest.repos.updateBranchProtection({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              branch: 'main',
+              required_status_checks: {
+                strict: true,
+                contexts: ['test']
+              },
+              enforce_admins: true,
+              required_pull_request_reviews: {
+                dismissal_restrictions: {},
+                dismiss_stale_reviews: true,
+                require_code_owner_reviews: true,
+                required_approving_review_count: 1
+              },
+              restrictions: null
+            });
