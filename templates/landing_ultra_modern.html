@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Elite FnO Trading Platform - AI-Powered Options Trading</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+        
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 245, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+        
+        @keyframes bgFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(1deg); }
+            66% { transform: translateY(10px) rotate(-1deg); }
+        }
+        
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar.scrolled {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00f5ff, #0080ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: linear-gradient(135deg, #00f5ff, #0080ff);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-links a:hover {
+            color: #00f5ff;
+            text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding: 0 2rem;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+        }
+        
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #00f5ff 0%, #0080ff 50%, #00ff88 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+            font-weight: 400;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+        
+        .hero-description {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.8s both;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00f5ff, #0080ff);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 245, 255, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #00f5ff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.2);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #00f5ff, #0080ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 4rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 245, 255, 0.1), transparent);
+            animation: rotate 6s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 245, 255, 0.2);
+            border-color: rgba(0, 245, 255, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #00f5ff, #0080ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .feature-description {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+        
+        /* Stats Section */
+        .stats {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            padding: 4rem 2rem;
+            margin: 4rem 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00ff88, #00f5ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+        
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: #00f5ff;
+        }
+        
+        .footer-bottom {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-content">
+            <div class="logo">
+                <i class="fas fa-rocket"></i>
+                Elite FnO Trading
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#stats">Performance</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/test-system">Testing</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 class="hero-title">Elite FnO Trading Platform</h1>
+            <p class="hero-subtitle">AI-Powered Options Trading Signals</p>
+            <p class="hero-description">
+                Get premium FnO trading signals with real-time market analysis, 
+                advanced technical indicators, and automated Telegram delivery. 
+                Join thousands of traders maximizing their profits with our elite platform.
+            </p>
+            <div class="cta-buttons">
+                <a href="/dashboard" class="btn btn-primary">
+                    <i class="fas fa-chart-line"></i>
+                    Start Trading
+                </a>
+                <a href="/test-system" class="btn btn-secondary">
+                    <i class="fas fa-flask"></i>
+                    Test Platform
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">Powerful Features</h2>
+        <p class="section-subtitle">Everything you need for successful FnO trading</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3 class="feature-title">AI-Powered Signals</h3>
+                <p class="feature-description">
+                    Advanced machine learning algorithms analyze market patterns, 
+                    volume data, and technical indicators to generate high-probability trading signals.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 class="feature-title">Real-Time Delivery</h3>
+                <p class="feature-description">
+                    Get instant signal alerts via Telegram with entry, target, 
+                    stop-loss levels, and detailed market analysis for quick execution.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3 class="feature-title">Live Market Data</h3>
+                <p class="feature-description">
+                    Real-time market data integration with NIFTY, BANKNIFTY, 
+                    and FINNIFTY for accurate signal generation and timing.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="feature-title">Risk Management</h3>
+                <p class="feature-description">
+                    Built-in risk management with optimal position sizing, 
+                    stop-loss calculation, and risk-reward ratio analysis.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3 class="feature-title">Mobile Optimized</h3>
+                <p class="feature-description">
+                    Fully responsive design works perfectly on all devices 
+                    with dedicated mobile alerts and notifications.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <h3 class="feature-title">Advanced Testing</h3>
+                <p class="feature-description">
+                    Comprehensive testing suite to verify signal accuracy, 
+                    market data quality, and system performance in real-time.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="stats" id="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">85%</div>
+                <div class="stat-label">Win Rate</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1,500+</div>
+                <div class="stat-label">Active Users</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Daily Signals</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Market Monitoring</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/test-system">Testing</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Elite FnO Trading Platform. All rights reserved.</p>
+                <p>Professional trading signals for advanced traders.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.7,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(stat => {
+                        const finalNumber = stat.textContent;
+                        stat.textContent = '0';
+                        animateNumber(stat, finalNumber);
+                    });
+                }
+            });
+        }, observerOptions);
+        
+        const statsSection = document.querySelector('.stats');
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+        
+        function animateNumber(element, finalNumber) {
+            const numericValue = parseInt(finalNumber.replace(/[^\d]/g, ''));
+            const suffix = finalNumber.replace(/[\d]/g, '');
+            let currentNumber = 0;
+            const increment = numericValue / 50;
+            const timer = setInterval(() => {
+                currentNumber += increment;
+                if (currentNumber >= numericValue) {
+                    element.textContent = finalNumber;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(currentNumber) + suffix;
+                }
+            }, 30);
+        }
+        
+        // Add some interactive particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = '4px';
+            particle.style.height = '4px';
+            particle.style.background = 'rgba(0, 245, 255, 0.6)';
+            particle.style.borderRadius = '50%';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '1';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.top = '100vh';
+            particle.style.animation = 'float-up 6s linear forwards';
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 6000);
+        }
+        
+        // Create floating particles
+        setInterval(createParticle, 2000);
+        
+        // Add CSS for particle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float-up {
+                to {
+                    transform: translateY(-100vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

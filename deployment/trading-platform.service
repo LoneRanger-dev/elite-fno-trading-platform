@@ -1,0 +1,29 @@
+[Unit]
+Description=FnO Trading Platform Service
+After=network.target
+
+[Service]
+Type=simple
+User=trading
+Group=trading
+WorkingDirectory=/opt/fno-trading-platform
+Environment=PLATFORM_MODE=premium
+Environment=PREMIUM_PORT=5500
+ExecStart=/opt/fno-trading-platform/venv/bin/python start_platform.py
+Restart=always
+RestartSec=3
+
+# Security settings
+NoNewPrivileges=yes
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+
+# Logging
+StandardOutput=append:/var/log/fno-trading-platform/platform.log
+StandardError=append:/var/log/fno-trading-platform/error.log
+
+[Install]
+WantedBy=multi-user.target

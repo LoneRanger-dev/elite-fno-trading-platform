@@ -1,0 +1,61 @@
+# Core Python Dependencies
+flask==2.3.3
+flask-cors==4.0.0
+flask-socketio==5.3.6
+requests==2.31.0
+pandas==2.1.1
+numpy==1.24.3
+python-dotenv==1.0.0
+schedule==1.2.0
+
+# Trading & Market Data
+kiteconnect==4.2.0
+yfinance==0.2.22
+ta-lib==0.4.28
+plotly==5.16.1
+matplotlib==3.7.2
+
+# Telegram Integration
+python-telegram-bot==20.5
+telegram==0.0.1
+
+# News & Web Scraping
+beautifulsoup4==4.12.2
+feedparser==6.0.10
+newspaper3k==0.2.8
+
+# Database
+sqlalchemy==2.0.21
+sqlite3
+
+# Background Tasks
+celery==5.3.2
+redis==4.6.0
+
+# API & Web Framework
+fastapi==0.103.1
+uvicorn==0.23.2
+pydantic==2.4.2
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2023.3
+logging
+json
+datetime
+threading
+asyncio
+
+# Development
+pytest==7.4.2
+black==23.7.0
+flake8==6.0.0
+
+# Mobile App Backend
+django==4.2.5
+django-rest-framework==3.14.0
+django-cors-headers==4.2.0
+
+# Deployment
+gunicorn==21.2.0
+supervisor==4.2.5

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite FnO Trading - Unleash Your Trading Potential</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
+    <style>
+        /* Custom styles for animations and gradients can go here if needed */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-black text-white">
+
+    <header class="fixed w-full bg-black/80 backdrop-blur-sm py-4 px-8 flex justify-between items-center z-50">
+        <div class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400">EliteFnO</div>
+        <nav class="hidden md:flex space-x-8">
+            <a href="#features" class="hover:text-blue-400 transition-colors">Features</a>
+            <a href="#pricing" class="hover:text-blue-400 transition-colors">Pricing</a>
+            <a href="#testimonials" class="hover:text-blue-400 transition-colors">Testimonials</a>
+            <a href="#contact" class="hover:text-blue-400 transition-colors">Contact</a>
+        </nav>
+        <div class="hidden md:flex items-center space-x-4">
+            <a href="{{ url_for('auth.login') }}" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Login</a>
+            <a href="{{ url_for('auth.register') }}" class="bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">Sign Up</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="h-screen flex items-center justify-center text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-black opacity-50"></div>
+            <div id="hero-animation" class="absolute inset-0 z-0"><canvas id="particle-canvas"></canvas></div>
+            <div class="z-10 px-4">
+                <h1 class="text-5xl md:text-7xl font-extrabold mb-4 leading-tight">Master the Market with <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400">AI-Powered</span> FnO Signals</h1>
+                <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">Gain a competitive edge with real-time, high-accuracy trading signals, advanced analytics, and a community of elite traders.</p>
+                <a href="#pricing" class="bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white font-bold py-4 px-8 rounded-full text-xl transition-transform hover:scale-105">Unlock Premium Access</a>
+            </div>
+        </section>
+        
+        <section id="features" class="py-20 px-4 sm:px-8 lg:px-16 text-center">
+            <h2 class="text-4xl font-bold mb-12">Why Choose EliteFnO?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 hover:border-blue-500 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-5xl text-blue-400 mb-4"><i class="fas fa-robot"></i></div>
+                    <h3 class="text-2xl font-bold mb-2">AI-Driven Signals</h3>
+                    <p class="text-gray-400">Leverage our proprietary AI to get high-probability trade setups for Nifty, BankNifty, and top stocks.</p>
+                </div>
+                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 hover:border-blue-500 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-5xl text-blue-400 mb-4"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="text-2xl font-bold mb-2">Real-Time Alerts</h3>
+                    <p class="text-gray-400">Instant Telegram and in-app notifications. Never miss a trading opportunity, even on the go.</p>
+                </div>
+                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 hover:border-blue-500 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-5xl text-blue-400 mb-4"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="text-2xl font-bold mb-2">Risk Management</h3>
+                    <p class="text-gray-400">Each signal includes clear entry, target, and stop-loss levels to protect your capital.</p>
+                </div>
+                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 hover:border-blue-500 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-5xl text-blue-400 mb-4"><i class="fas fa-tachometer-alt"></i></div>
+                    <h3 class="text-2xl font-bold mb-2">Live Dashboard</h3>
+                    <p class="text-gray-400">Monitor market trends, track signal performance, and manage your portfolio from a single, intuitive interface.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="py-20 px-4 sm:px-8 lg:px-16 text-center bg-gray-900/50">
+            <h2 class="text-4xl font-bold mb-12">Find Your Perfect Plan</h2>
+            <div class="flex flex-wrap justify-center gap-8">
+                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 w-full max-w-sm">
+                    <h3 class="text-3xl font-bold mb-4">Pro Trader</h3>
+                    <p class="text-5xl font-extrabold mb-2">₹999 <span class="text-lg font-medium text-gray-400">/ month</span></p>
+                    <ul class="text-left my-8 space-y-4 text-gray-300">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i> Real-time AI Signals</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i> Telegram & App Alerts</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i> Basic Risk Management</li>
+                        <li class="flex items-center text-gray-500"><i class="fas fa-times-circle mr-3"></i> Advanced Analytics</li>
+                        <li class="flex items-center text-gray-500"><i class="fas fa-times-circle mr-3"></i> Pro Community Access</li>
+                    </ul>
+                    <button class="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition-colors" onclick="startPayment('pro')">Choose Plan</button>
+                </div>
+                <div class="bg-gray-900 p-8 rounded-xl border-2 border-blue-500 w-full max-w-sm relative transform scale-105">
+                    <div class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-sm font-bold px-4 py-1 rounded-full">Most Popular</div>
+                    <h3 class="text-3xl font-bold mb-4">Elite Trader</h3>
+                    <p class="text-5xl font-extrabold mb-2">₹2499 <span class="text-lg font-medium text-gray-400">/ 3 months</span></p>
+                    <ul class="text-left my-8 space-y-4 text-gray-300">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i> All Pro Features</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i> Advanced Analytics</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i> Pro Community Access</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i> Backtesting Engine</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i> Priority Support</li>
+                    </ul>
+                    <button class="w-full bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white font-bold py-3 px-4 rounded-lg transition-colors" onclick="startPayment('elite')">Choose Plan</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="py-20 px-4 sm:px-8 lg:px-16 text-center">
+            <h2 class="text-4xl font-bold mb-12">Trusted by Traders Like You</h2>
+            <div class="flex flex-wrap justify-center gap-8">
+                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 max-w-md">
+                    <p class="text-gray-300 italic">"The accuracy of the signals is insane. I recovered my subscription fee in the first two trades!"</p>
+                    <div class="mt-6 font-bold text-lg">- Ankit S., Mumbai</div>
+                </div>
+                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 max-w-md">
+                    <p class="text-gray-300 italic">"Finally, a signal provider that focuses on risk management. The stop-loss levels are a lifesaver."</p>
+                    <div class="mt-6 font-bold text-lg">- Priya R., Bangalore</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 px-4 sm:px-8 text-center bg-gradient-to-t from-gray-900/50 to-black">
+            <h2 class="text-4xl font-bold mb-4">Ready to Elevate Your Trading?</h2>
+            <p class="text-lg text-gray-300 mb-8">Join our community and start making informed, data-driven decisions today.</p>
+            <a href="#pricing" class="bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white font-bold py-4 px-8 rounded-full text-xl transition-transform hover:scale-105">Get Started Now</a>
+        </section>
+    </main>
+
+    <footer class="text-center py-8 border-t border-gray-800">
+        <p class="text-gray-500">&copy; 2025 EliteFnO. All Rights Reserved. For educational purposes only.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/premium_landing.js') }}"></script>
+</body>
+</html>

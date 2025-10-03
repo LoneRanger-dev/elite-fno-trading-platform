@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Trading Bot{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Statistics Cards -->
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card card-stat bg-primary text-white">
+            <div class="card-body">
+                <h3 class="stat-number">{{ stats.total_signals }}</h3>
+                <p class="stat-label">Signals Today</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card card-stat bg-success text-white">
+            <div class="card-body">
+                <h3 class="stat-number">{{ "%.1f"|format(stats.win_rate) }}%</h3>
+                <p class="stat-label">Win Rate</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card card-stat bg-info text-white">
+            <div class="card-body">
+                <h3 class="stat-number">{{ "%.2f"|format(stats.total_pnl) }}%</h3>
+                <p class="stat-label">Total P&L</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card card-stat bg-warning text-white">
+            <div class="card-body">
+                <h3 class="stat-number">{{ performance.total_signals }}</h3>
+                <p class="stat-label">Signals (30d)</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Market Data -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">📈 Live Market Data</h5>
+                <small class="text-muted">Real-time updates</small>
+            </div>
+            <div class="card-body">
+                <div class="market-data">
+                    {% for instrument, data in market_data.items() %}
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <strong>{{ instrument }}</strong>
+                        </div>
+                        <div class="col-4 text-end">
+                            <span id="price-{{ instrument }}">₹{{ "%.2f"|format(data.price) }}</span>
+                        </div>
+                        <div class="col-4 text-end">
+                            <span id="change-{{ instrument }}" class="{% if data.change >= 0 %}price-up{% else %}price-down{% endif %}">
+                                {{ "%+.2f"|format(data.change) }}%
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bot Control -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">🤖 Bot Control</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-success" onclick="startBot()">
+                        ▶️ Start Bot
+                    </button>
+                    <button class="btn btn-danger" onclick="stopBot()">
+                        ⏹️ Stop Bot
+                    </button>
+                    <button class="btn btn-info" onclick="sendTestMessage()">
+                        📱 Send Test Message
+                    </button>
+                </div>
+                
+                <hr>
+                
+                <div class="row text-center">
+                    <div class="col-6">
+                        <strong>Status</strong><br>
+                        <span id="detailed-bot-status" class="{% if bot_status.running %}status-online{% else %}status-offline{% endif %}">
+                            {{ 'Running' if bot_status.running else 'Stopped' }}
+                        </span>
+                    </div>
+                    <div class="col-6">
+                        <strong>Uptime</strong><br>
+                        <small>{{ bot_status.uptime[:19] if bot_status.uptime else 'N/A' }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Recent Signals -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">🎯 Recent Signals</h5>
+                <a href="{{ url_for('signals_page') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% if signals %}
+                    {% for signal in signals[:5] %}
+                    <div class="card signal-card {{ signal.signal_type.lower() }}">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <strong>{{ signal.instrument }}</strong><br>
+                                    <small class="text-muted">{{ signal.timestamp[:16] }}</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <span class="badge {% if signal.signal_type == 'BUY' %}bg-success{% else %}bg-danger{% endif %}">
+                                        {{ signal.signal_type }}
+                                    </span>
+                                </div>
+                                <div class="col-md-2">
+                                    Entry: ₹{{ "%.2f"|format(signal.entry_price) }}
+                                </div>
+                                <div class="col-md-2">
+                                    Target: ₹{{ "%.2f"|format(signal.target_price) }}
+                                </div>
+                                <div class="col-md-2">
+                                    Confidence: {{ "%.0f"|format(signal.confidence) }}%
+                                </div>
+                                <div class="col-md-1">
+                                    <span class="badge bg-secondary">{{ signal.status }}</span>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12">
+                                    <small class="text-muted">Setup: {{ signal.setup_description }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center text-muted py-4">
+                        No signals available yet
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Performance Summary -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">📊 Performance (30 days)</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Win Rate:</span>
+                        <strong class="text-success">{{ "%.1f"|format(performance.win_rate) }}%</strong>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Total P&L:</span>
+                        <strong class="{% if performance.total_pnl >= 0 %}text-success{% else %}text-danger{% endif %}">
+                            {{ "%+.2f"|format(performance.total_pnl) }}%
+                        </strong>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Best Trade:</span>
+                        <strong class="text-success">+{{ "%.2f"|format(performance.best_trade) }}%</strong>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Worst Trade:</span>
+                        <strong class="text-danger">{{ "%.2f"|format(performance.worst_trade) }}%</strong>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Avg Win:</span>
+                        <span>+{{ "%.2f"|format(performance.avg_win) }}%</span>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Avg Loss:</span>
+                        <span>{{ "%.2f"|format(performance.avg_loss) }}%</span>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Profit Factor:</span>
+                        <strong>{{ "%.2f"|format(performance.profit_factor) }}</strong>
+                    </div>
+                </div>
+                
+                <div class="progress mb-2">
+                    <div class="progress-bar bg-success" style="width: {{ performance.win_rate }}%"></div>
+                </div>
+                <small class="text-muted">{{ performance.winning_trades }} wins / {{ performance.losing_trades }} losses</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats Row -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">📋 Today's Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-2">
+                        <h4>{{ stats.total_signals }}</h4>
+                        <small class="text-muted">Total Signals</small>
+                    </div>
+                    <div class="col-md-2">
+                        <h4 class="text-success">{{ stats.winning_signals }}</h4>
+                        <small class="text-muted">Winners</small>
+                    </div>
+                    <div class="col-md-2">
+                        <h4 class="text-danger">{{ stats.losing_signals }}</h4>
+                        <small class="text-muted">Losers</small>
+                    </div>
+                    <div class="col-md-2">
+                        <h4 class="{% if stats.total_pnl >= 0 %}text-success{% else %}text-danger{% endif %}">
+                            {{ "%+.2f"|format(stats.total_pnl) }}%
+                        </h4>
+                        <small class="text-muted">P&L</small>
+                    </div>
+                    <div class="col-md-2">
+                        <h4>{{ "%.1f"|format(stats.win_rate) }}%</h4>
+                        <small class="text-muted">Win Rate</small>
+                    </div>
+                    <div class="col-md-2">
+                        <h4>{{ "%.2f"|format(stats.avg_win) }}%</h4>
+                        <small class="text-muted">Avg Win</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Update detailed bot status
+    socket.on('bot_status', function(data) {
+        const detailedStatus = document.getElementById('detailed-bot-status');
+        if (detailedStatus) {
+            detailedStatus.textContent = data.running ? 'Running' : 'Stopped';
+            detailedStatus.className = data.running ? 'status-online' : 'status-offline';
+        }
+    });
+    
+    // Chart for performance visualization (if needed)
+    // This can be expanded with Chart.js integration
+</script>
+{% endblock %}

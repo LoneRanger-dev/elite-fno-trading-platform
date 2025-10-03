@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Trading Bot Dashboard{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+        }
+        
+        .card-stat {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .signal-card {
+            border-left: 4px solid #007bff;
+            margin-bottom: 15px;
+        }
+        
+        .signal-card.buy {
+            border-left-color: #28a745;
+        }
+        
+        .signal-card.sell {
+            border-left-color: #dc3545;
+        }
+        
+        .status-online {
+            color: #28a745;
+        }
+        
+        .status-offline {
+            color: #dc3545;
+        }
+        
+        .market-data {
+            font-family: 'Courier New', monospace;
+        }
+        
+        .price-up {
+            color: #28a745;
+        }
+        
+        .price-down {
+            color: #dc3545;
+        }
+        
+        .real-time-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #28a745;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        
+        .footer {
+            margin-top: 50px;
+            padding: 20px 0;
+            border-top: 1px solid #dee2e6;
+            color: #6c757d;
+            text-align: center;
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                📊 Trading Bot Dashboard
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('signals_page') }}">Signals</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('performance_page') }}">Performance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('settings_page') }}">Settings</a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav">
+                    <div class="nav-item">
+                        <span class="navbar-text">
+                            <span class="real-time-indicator"></span>
+                            Bot Status: <span id="bot-status" class="status-offline">Offline</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <p>&copy; 2025 Intraday Trading Bot Dashboard. Built with Flask & Socket.IO</p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Initialize Socket.IO connection
+        const socket = io();
+        
+        // Socket event handlers
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+        
+        socket.on('bot_status', function(data) {
+            updateBotStatus(data);
+        });
+        
+        socket.on('market_update', function(data) {
+            updateMarketData(data);
+        });
+        
+        socket.on('new_signal', function(data) {
+            showNewSignalAlert(data);
+        });
+        
+        socket.on('error', function(data) {
+            console.error('Socket error:', data);
+        });
+        
+        // Update bot status in UI
+        function updateBotStatus(status) {
+            const statusElement = document.getElementById('bot-status');
+            if (statusElement) {
+                statusElement.textContent = status.running ? 'Online' : 'Offline';
+                statusElement.className = status.running ? 'status-online' : 'status-offline';
+            }
+        }
+        
+        // Update market data in UI
+        function updateMarketData(data) {
+            for (const [instrument, marketData] of Object.entries(data)) {
+                const priceElement = document.getElementById(`price-${instrument}`);
+                const changeElement = document.getElementById(`change-${instrument}`);
+                
+                if (priceElement) {
+                    priceElement.textContent = `₹${marketData.price.toFixed(2)}`;
+                }
+                
+                if (changeElement) {
+                    changeElement.textContent = `${marketData.change >= 0 ? '+' : ''}${marketData.change.toFixed(2)}%`;
+                    changeElement.className = marketData.change >= 0 ? 'price-up' : 'price-down';
+                }
+            }
+        }
+        
+        // Show new signal alert
+        function showNewSignalAlert(signal) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed';
+            alertDiv.style.cssText = 'top: 100px; right: 20px; z-index: 1050; min-width: 300px;';
+            alertDiv.innerHTML = `
+                <strong>🚨 New Signal!</strong><br>
+                ${signal.instrument} - ${signal.signal_type}<br>
+                Entry: ₹${signal.entry_price} | Target: ₹${signal.target_price}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            // Auto-remove after 10 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.parentNode.removeChild(alertDiv);
+                }
+            }, 10000);
+        }
+        
+        // Utility functions
+        function sendTestMessage() {
+            fetch('/api/send-test-message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Test message sent successfully!');
+                } else {
+                    alert('Failed to send test message: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error sending test message');
+            });
+        }
+        
+        function startBot() {
+            fetch('/api/bot/start', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Bot started successfully!');
+                } else {
+                    alert('Failed to start bot: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error starting bot');
+            });
+        }
+        
+        function stopBot() {
+            fetch('/api/bot/stop', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Bot stopped successfully!');
+                } else {
+                    alert('Failed to stop bot: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error stopping bot');
+            });
+        }
+        
+        // Request updates every 30 seconds
+        setInterval(() => {
+            socket.emit('request_update');
+        }, 30000);
+        
+        // Initial update request
+        setTimeout(() => {
+            socket.emit('request_update');
+        }, 1000);
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

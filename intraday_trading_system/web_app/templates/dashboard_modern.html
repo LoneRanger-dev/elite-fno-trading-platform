@@ -1,0 +1,650 @@
+{% extends "base_modern.html" %}
+
+{% block title %}Trading Dashboard - Premium Trading Hub{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-header {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 25px;
+        padding: 30px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .welcome-text {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: var(--gold-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+    }
+
+    .market-status {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .market-open {
+        color: #00ff00;
+    }
+
+    .market-closed {
+        color: #ff6b6b;
+    }
+
+    .feature-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 25px;
+        height: 100%;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        transition: left 0.5s;
+    }
+
+    .feature-card:hover::before {
+        left: 100%;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-heavy);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        background: var(--gold-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 20px;
+    }
+
+    .feature-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #fff;
+    }
+
+    .feature-description {
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+    }
+
+    .trading-tips {
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 30px;
+    }
+
+    .tip-item {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-left: 4px solid var(--gold-gradient);
+        transition: all 0.3s ease;
+    }
+
+    .tip-item:hover {
+        transform: translateX(10px);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .indicator-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .indicator-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .indicator-card:hover {
+        transform: scale(1.05);
+        box-shadow: var(--shadow-heavy);
+    }
+
+    .indicator-value {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .indicator-bullish {
+        color: #00ff00;
+    }
+
+    .indicator-bearish {
+        color: #ff6b6b;
+    }
+
+    .indicator-neutral {
+        color: #ffd700;
+    }
+
+    .analysis-section {
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 30px;
+    }
+
+    .signal-alert {
+        background: var(--success-gradient);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        color: #fff;
+        font-weight: 600;
+        text-align: center;
+        animation: pulse 2s infinite;
+    }
+
+    .signal-alert.buy {
+        background: var(--success-gradient);
+    }
+
+    .signal-alert.sell {
+        background: var(--warning-gradient);
+    }
+
+    .quick-actions {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    .quick-action-btn {
+        flex: 1;
+        min-width: 200px;
+        padding: 15px 25px;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        color: #fff;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .quick-action-btn:hover {
+        transform: translateY(-3px);
+        color: #fff;
+    }
+
+    .chart-container {
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 30px;
+    }
+
+    .bot-interaction {
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 30px;
+    }
+
+    .bot-commands {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+    .bot-command {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .bot-command:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-3px);
+    }
+
+    .news-ticker {
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 15px;
+        margin-bottom: 30px;
+        overflow: hidden;
+    }
+
+    .ticker-content {
+        white-space: nowrap;
+        animation: scroll 30s linear infinite;
+    }
+
+    @keyframes scroll {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header animate__animated animate__fadeInDown">
+        <div class="welcome-text">Welcome Back, {{ session.username or 'Trader' }}!</div>
+        <div class="market-status">
+            {% if market_open %}
+            <span class="market-open"><i class="fas fa-circle"></i> Market is OPEN</span>
+            {% else %}
+            <span class="market-closed"><i class="fas fa-circle"></i> Market is CLOSED</span>
+            {% endif %}
+        </div>
+        {% if session.subscription_status == 'active' %}
+        <div class="live-indicator">
+            <div class="live-dot"></div>
+            <span>PREMIUM ACTIVE - Live Signals Enabled</span>
+        </div>
+        {% else %}
+        <a href="{{ url_for('subscribe') }}" class="btn btn-gold">
+            <i class="fas fa-crown me-2"></i>Upgrade to Premium
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- News Ticker -->
+    <div class="news-ticker">
+        <div class="ticker-content">
+            <strong>Market News:</strong> 
+            {% for news in market_news[:3] %}
+            {{ news.title }} • 
+            {% endfor %}
+            Stay updated with premium signals and analysis
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="stat-card animate__animated animate__fadeInUp">
+                <div class="stat-number">{{ signals_today or 0 }}</div>
+                <div class="stat-label">Signals Today</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+                <div class="stat-number">{{ accuracy or 0 }}%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                <div class="stat-number">{{ active_positions or 0 }}</div>
+                <div class="stat-label">Active Positions</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+                <div class="stat-number">+{{ profit_today or 0 }}%</div>
+                <div class="stat-label">Today's P&L</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Signals Alert -->
+    {% if latest_signal and session.subscription_status == 'active' %}
+    <div class="signal-alert {{ 'buy' if 'BUY' in latest_signal.signal else 'sell' }}">
+        <i class="fas fa-bolt me-2"></i>
+        <strong>LATEST SIGNAL:</strong> {{ latest_signal.symbol }} - {{ latest_signal.signal }} 
+        ({{ latest_signal.confidence }}% confidence) - {{ latest_signal.time }}
+    </div>
+    {% endif %}
+
+    <!-- Main Dashboard Content -->
+    <div class="row">
+        <!-- Trading Indicators -->
+        <div class="col-lg-4 mb-4">
+            <div class="analysis-section">
+                <h4><i class="fas fa-chart-line me-2"></i>Market Indicators</h4>
+                <div class="indicator-grid">
+                    <div class="indicator-card">
+                        <div class="indicator-value indicator-{{ 'bullish' if nifty_trend == 'bullish' else 'bearish' if nifty_trend == 'bearish' else 'neutral' }}">
+                            {{ nifty_value or 19850 }}
+                        </div>
+                        <div class="indicator-label">NIFTY 50</div>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-value indicator-{{ 'bullish' if banknifty_trend == 'bullish' else 'bearish' if banknifty_trend == 'bearish' else 'neutral' }}">
+                            {{ banknifty_value or 44750 }}
+                        </div>
+                        <div class="indicator-label">BANK NIFTY</div>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-value indicator-{{ 'neutral' if rsi_value > 30 and rsi_value < 70 else 'bullish' if rsi_value < 30 else 'bearish' }}">
+                            {{ rsi_value or 55 }}
+                        </div>
+                        <div class="indicator-label">RSI</div>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-value indicator-{{ 'bullish' if macd_signal == 'positive' else 'bearish' }}">
+                            {{ macd_value or 15.2 }}
+                        </div>
+                        <div class="indicator-label">MACD</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trading Tips -->
+        <div class="col-lg-8 mb-4">
+            <div class="trading-tips">
+                <h4><i class="fas fa-lightbulb me-2"></i>Today's Trading Tips</h4>
+                
+                <div class="tip-item">
+                    <strong><i class="fas fa-target me-2"></i>Key Levels:</strong>
+                    Watch for NIFTY support at 19800 and resistance at 20200. Bank Nifty showing strength above 44500.
+                </div>
+                
+                <div class="tip-item">
+                    <strong><i class="fas fa-clock me-2"></i>Time-based Strategy:</strong>
+                    First hour (9:15-10:15 AM) often shows the day's direction. Look for breakouts after 10:30 AM.
+                </div>
+                
+                <div class="tip-item">
+                    <strong><i class="fas fa-volume-up me-2"></i>Volume Analysis:</strong>
+                    High volume breakouts above resistance levels offer better success rates. Monitor FII/DII activity.
+                </div>
+                
+                <div class="tip-item">
+                    <strong><i class="fas fa-shield-alt me-2"></i>Risk Management:</strong>
+                    Never risk more than 2% per trade. Set stop losses before entering positions.
+                </div>
+
+                {% if session.subscription_status == 'active' %}
+                <div class="tip-item" style="border-left-color: #00ff00;">
+                    <strong><i class="fas fa-crown me-2"></i>Premium Insight:</strong>
+                    OI data suggests bullish build-up in 20000 CE. Consider long positions with proper stop loss.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Features Row -->
+    <div class="row">
+        <!-- Bot Interaction -->
+        <div class="col-lg-6 mb-4">
+            <div class="bot-interaction">
+                <h4><i class="fas fa-robot me-2"></i>Bot Commands</h4>
+                <p>Click on any command to execute:</p>
+                
+                <div class="bot-commands">
+                    <div class="bot-command" onclick="executeCommand('market_status')">
+                        <i class="fas fa-chart-line me-2"></i>
+                        <strong>Market Status</strong><br>
+                        <small>Get current market overview</small>
+                    </div>
+                    
+                    <div class="bot-command" onclick="executeCommand('latest_signals')">
+                        <i class="fas fa-signal me-2"></i>
+                        <strong>Latest Signals</strong><br>
+                        <small>View recent trading signals</small>
+                    </div>
+                    
+                    <div class="bot-command" onclick="executeCommand('portfolio_analysis')">
+                        <i class="fas fa-briefcase me-2"></i>
+                        <strong>Portfolio Analysis</strong><br>
+                        <small>Analyze your positions</small>
+                    </div>
+                    
+                    <div class="bot-command" onclick="executeCommand('news_update')">
+                        <i class="fas fa-newspaper me-2"></i>
+                        <strong>News Update</strong><br>
+                        <small>Get latest market news</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Analysis -->
+        <div class="col-lg-6 mb-4">
+            <div class="chart-container">
+                <h4><i class="fas fa-chart-area me-2"></i>Live Market Chart</h4>
+                <canvas id="marketChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Features -->
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="feature-card animate__animated animate__fadeInUp">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="feature-title">Live Signals</div>
+                <div class="feature-description">
+                    Get real-time trading signals with OI analysis, technical indicators, and confidence levels during market hours (9:15 AM - 3:30 PM).
+                </div>
+                {% if session.subscription_status != 'active' %}
+                <a href="{{ url_for('subscribe') }}" class="btn btn-gold mt-3">Upgrade to Access</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="feature-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="feature-title">AI Analysis</div>
+                <div class="feature-description">
+                    Advanced algorithmic analysis combining multiple technical indicators, OI data, and market sentiment for accurate predictions.
+                </div>
+                {% if session.subscription_status != 'active' %}
+                <a href="{{ url_for('subscribe') }}" class="btn btn-gold mt-3">Upgrade to Access</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="feature-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                <div class="feature-icon">
+                    <i class="fas fa-telegram"></i>
+                </div>
+                <div class="feature-title">Telegram Alerts</div>
+                <div class="feature-description">
+                    Receive instant notifications on Telegram for all trading signals, market news, and important updates throughout the day.
+                </div>
+                {% if session.subscription_status != 'active' %}
+                <a href="{{ url_for('subscribe') }}" class="btn btn-gold mt-3">Upgrade to Access</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <a href="{{ url_for('signals') if url_for else '#' }}" class="quick-action-btn" style="background: var(--success-gradient);">
+            <i class="fas fa-signal me-2"></i>View All Signals
+        </a>
+        <a href="{{ url_for('analysis') if url_for else '#' }}" class="quick-action-btn" style="background: var(--info-gradient);">
+            <i class="fas fa-chart-bar me-2"></i>Market Analysis
+        </a>
+        <a href="{{ url_for('subscribe') if url_for else '#' }}" class="quick-action-btn" style="background: var(--gold-gradient); color: #000;">
+            <i class="fas fa-crown me-2"></i>Premium Plans
+        </a>
+        <a href="{{ url_for('profile') if url_for else '#' }}" class="quick-action-btn" style="background: var(--primary-gradient);">
+            <i class="fas fa-user me-2"></i>My Profile
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Bot command execution
+    function executeCommand(command) {
+        // Show loading
+        const alertHtml = `
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <div class="spinner me-2" style="width:20px;height:20px;"></div>
+                Executing command: ${command.replace('_', ' ')}...
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+        document.querySelector('main').insertAdjacentHTML('afterbegin', alertHtml);
+        
+        // Simulate API call
+        setTimeout(() => {
+            document.querySelector('.alert').remove();
+            
+            let response = '';
+            switch(command) {
+                case 'market_status':
+                    response = '📊 Market Status: NIFTY at 19,850 (+0.5%), Bank Nifty at 44,750 (+0.8%). Bullish sentiment continues.';
+                    break;
+                case 'latest_signals':
+                    response = '⚡ Latest Signal: RELIANCE - BUY CE (75% confidence) at 10:30 AM. Target: 2,450, SL: 2,380';
+                    break;
+                case 'portfolio_analysis':
+                    response = '📈 Portfolio: 3 active positions, +2.5% today. HDFC Bank showing strength, consider booking profits.';
+                    break;
+                case 'news_update':
+                    response = '📰 Breaking: RBI policy meeting today, crude oil prices stable, FII buying continues in banking sector.';
+                    break;
+            }
+            
+            const successAlert = `
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><i class="fas fa-robot me-2"></i>Bot Response:</strong> ${response}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            document.querySelector('main').insertAdjacentHTML('afterbegin', successAlert);
+        }, 2000);
+    }
+
+    // Market Chart
+    const ctx = document.getElementById('marketChart').getContext('2d');
+    const marketChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['9:15', '10:00', '10:45', '11:30', '12:15', '1:00', '1:45', '2:30', '3:15'],
+            datasets: [{
+                label: 'NIFTY 50',
+                data: [19800, 19825, 19850, 19875, 19865, 19890, 19920, 19905, 19885],
+                borderColor: '#00ff00',
+                backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#fff'
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: '#fff'
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: '#fff'
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                }
+            }
+        }
+    });
+
+    // Auto-refresh data every 30 seconds during market hours
+    {% if market_open %}
+    setInterval(() => {
+        // Simulate real-time data updates
+        const lastPrice = marketChart.data.datasets[0].data[marketChart.data.datasets[0].data.length - 1];
+        const newPrice = lastPrice + (Math.random() - 0.5) * 20;
+        
+        marketChart.data.datasets[0].data.push(newPrice);
+        marketChart.data.labels.push(new Date().toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit'
+        }));
+        
+        if (marketChart.data.datasets[0].data.length > 20) {
+            marketChart.data.datasets[0].data.shift();
+            marketChart.data.labels.shift();
+        }
+        
+        marketChart.update('none');
+    }, 5000);
+    {% endif %}
+
+    // Update live statistics
+    function updateStats() {
+        // Simulate updates
+        document.querySelector('#member-count').textContent = Math.floor(Math.random() * 100) + 50;
+        document.querySelector('#signal-count').textContent = Math.floor(Math.random() * 20) + 5;
+    }
+
+    setInterval(updateStats, 10000);
+</script>
+{% endblock %}

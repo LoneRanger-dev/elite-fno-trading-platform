@@ -1,0 +1,232 @@
+{
+  "accounts": {
+    "demo_trader_1": {
+      "user_id": "demo_trader_1",
+      "balance": 150000,
+      "initial_balance": 100000,
+      "positions": {
+        "NIFTY_CE": {
+          "quantity": 4,
+          "avg_price": 1488.0290978699438,
+          "current_price": 1420.0027317354015,
+          "invested_amount": 5952.116391479775,
+          "current_value": 5695.1368073301055,
+          "pnl": -299.675513394512,
+          "last_updated": "2025-10-03T19:10:10.730238"
+        },
+        "TCS_CE": {
+          "quantity": 6,
+          "avg_price": 436.00868925461987,
+          "current_price": 437.6910704942722,
+          "invested_amount": 2616.052135527719,
+          "current_value": 2571.4113618794936,
+          "pnl": 35.48469061933276,
+          "last_updated": "2025-10-03T19:10:10.730256"
+        }
+      },
+      "trade_history": [],
+      "pnl": 0.0,
+      "total_trades": 250,
+      "winning_trades": 174,
+      "losing_trades": 76,
+      "win_rate": 69.6,
+      "max_profit": 9434.374144439134,
+      "max_loss": -5242.001441180908,
+      "created_at": "2025-10-03T19:10:10.728963",
+      "last_activity": "2025-10-03T19:10:10.728974"
+    },
+    "demo_trader_2": {
+      "user_id": "demo_trader_2",
+      "balance": 120000,
+      "initial_balance": 100000,
+      "positions": {
+        "NIFTY_CE": {
+          "quantity": 5,
+          "avg_price": 284.3152552859332,
+          "current_price": 296.2159058319666,
+          "invested_amount": 1421.576276429666,
+          "current_value": 1467.7924292881391,
+          "pnl": 123.72049281448407,
+          "last_updated": "2025-10-03T19:10:10.731640"
+        },
+        "BANKNIFTY_CE": {
+          "quantity": 8,
+          "avg_price": 499.13978239073606,
+          "current_price": 455.16390947396434,
+          "invested_amount": 3993.1182591258885,
+          "current_value": 4184.9540057461545,
+          "pnl": -390.20854369368647,
+          "last_updated": "2025-10-03T19:10:10.731635"
+        },
+        "HDFC_CE": {
+          "quantity": 10,
+          "avg_price": 1514.5930861925956,
+          "current_price": 1399.2854711373816,
+          "invested_amount": 15145.930861925955,
+          "current_value": 15569.086163156522,
+          "pnl": -1005.0681413778061,
+          "last_updated": "2025-10-03T19:10:10.731644"
+        },
+        "RELIANCE_CE": {
+          "quantity": 9,
+          "avg_price": 857.5039622280303,
+          "current_price": 774.9532584529918,
+          "invested_amount": 7717.535660052273,
+          "current_value": 8453.772795690156,
+          "pnl": 44.818089848947444,
+          "last_updated": "2025-10-03T19:10:10.731648"
+        }
+      },
+      "trade_history": [],
+      "pnl": 0.0,
+      "total_trades": 180,
+      "winning_trades": 136,
+      "losing_trades": 44,
+      "win_rate": 75.55555555555556,
+      "max_profit": 12198.621412751545,
+      "max_loss": -5370.413543067612,
+      "created_at": "2025-10-03T19:10:10.730264",
+      "last_activity": "2025-10-03T19:10:10.730266"
+    },
+    "demo_trader_3": {
+      "user_id": "demo_trader_3",
+      "balance": 100000,
+      "initial_balance": 100000,
+      "positions": {
+        "TCS_CE": {
+          "quantity": 6,
+          "avg_price": 728.8544043962078,
+          "current_price": 670.0643249996432,
+          "invested_amount": 4373.126426377246,
+          "current_value": 4144.301179976811,
+          "pnl": 357.55586882287025,
+          "last_updated": "2025-10-03T19:10:10.732546"
+        },
+        "BANKNIFTY_CE": {
+          "quantity": 3,
+          "avg_price": 1277.3147144240145,
+          "current_price": 1311.2960782611094,
+          "invested_amount": 3831.944143272043,
+          "current_value": 3695.9929749468592,
+          "pnl": -227.1207179920137,
+          "last_updated": "2025-10-03T19:10:10.732555"
+        }
+      },
+      "trade_history": [],
+      "pnl": 0.0,
+      "total_trades": 120,
+      "winning_trades": 77,
+      "losing_trades": 43,
+      "win_rate": 64.16666666666667,
+      "max_profit": 14092.152394625049,
+      "max_loss": -3344.6791080893368,
+      "created_at": "2025-10-03T19:10:10.731653",
+      "last_activity": "2025-10-03T19:10:10.731654"
+    },
+    "pro_trader_alpha": {
+      "user_id": "pro_trader_alpha",
+      "balance": 200000,
+      "initial_balance": 100000,
+      "positions": {
+        "RELIANCE_CE": {
+          "quantity": 6,
+          "avg_price": 1860.9844118900846,
+          "current_price": 1742.606142841351,
+          "invested_amount": 11165.906471340508,
+          "current_value": 11435.610178033228,
+          "pnl": 245.39344537577793,
+          "last_updated": "2025-10-03T19:10:10.734201"
+        },
+        "HDFC_CE": {
+          "quantity": 1,
+          "avg_price": 745.923224829071,
+          "current_price": 818.359819750378,
+          "invested_amount": 745.923224829071,
+          "current_value": 685.2583820466012,
+          "pnl": 43.77097180585443,
+          "last_updated": "2025-10-03T19:10:10.734213"
+        },
+        "TCS_CE": {
+          "quantity": 4,
+          "avg_price": 1822.8012369601674,
+          "current_price": 1932.9611562113041,
+          "invested_amount": 7291.20494784067,
+          "current_value": 6566.873949569831,
+          "pnl": 376.560650204552,
+          "last_updated": "2025-10-03T19:10:10.734219"
+        }
+      },
+      "trade_history": [],
+      "pnl": 0.0,
+      "total_trades": 380,
+      "winning_trades": 287,
+      "losing_trades": 93,
+      "win_rate": 75.52631578947368,
+      "max_profit": 11001.632881015146,
+      "max_loss": -7005.716211941346,
+      "created_at": "2025-10-03T19:10:10.732559",
+      "last_activity": "2025-10-03T19:10:10.732560"
+    },
+    "market_wizard": {
+      "user_id": "market_wizard",
+      "balance": 180000,
+      "initial_balance": 100000,
+      "positions": {
+        "BANKNIFTY_CE": {
+          "quantity": 4,
+          "avg_price": 656.8270840823934,
+          "current_price": 630.1582780470168,
+          "invested_amount": 2627.3083363295736,
+          "current_value": 2433.039957100319,
+          "pnl": 100.80246438522585,
+          "last_updated": "2025-10-03T19:10:10.736975"
+        },
+        "RELIANCE_CE": {
+          "quantity": 4,
+          "avg_price": 622.4729614850703,
+          "current_price": 619.0123042949325,
+          "invested_amount": 2489.891845940281,
+          "current_value": 2535.9350655905796,
+          "pnl": -126.39026259517938,
+          "last_updated": "2025-10-03T19:10:10.736989"
+        },
+        "TCS_CE": {
+          "quantity": 10,
+          "avg_price": 135.0875628499358,
+          "current_price": 145.97909688531922,
+          "invested_amount": 1350.875628499358,
+          "current_value": 1287.6526092810805,
+          "pnl": 4.098225710650038,
+          "last_updated": "2025-10-03T19:10:10.736994"
+        }
+      },
+      "trade_history": [],
+      "pnl": 0.0,
+      "total_trades": 320,
+      "winning_trades": 203,
+      "losing_trades": 117,
+      "win_rate": 63.4375,
+      "max_profit": 6876.144147989413,
+      "max_loss": -5455.64321670649,
+      "created_at": "2025-10-03T19:10:10.734222",
+      "last_activity": "2025-10-03T19:10:10.734224"
+    },
+    "user_1759428869312": {
+      "user_id": "user_1759428869312",
+      "balance": 100000,
+      "initial_balance": 100000,
+      "positions": {},
+      "trade_history": [],
+      "pnl": 0.0,
+      "total_trades": 0,
+      "winning_trades": 0,
+      "losing_trades": 0,
+      "win_rate": 0.0,
+      "max_profit": 0.0,
+      "max_loss": 0.0,
+      "created_at": "2025-10-03T21:04:23.739654",
+      "last_activity": "2025-10-03T21:04:23.739661"
+    }
+  },
+  "last_updated": "2025-10-03T21:04:23.739666"
+}

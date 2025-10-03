@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium FnO Trading Signals</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-indigo-600 to-purple-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <span class="text-white text-xl font-bold">Premium FnO Signals</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-white px-3 py-1 rounded-full bg-green-500" id="marketStatus">
+                        Market Open
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-gray-500 text-sm font-medium">Signals Today</h3>
+                    <span class="text-green-500 bg-green-100 px-2 py-1 rounded text-sm">Live</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900 mt-2" id="signalsCount">0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-gray-500 text-sm font-medium">Success Rate</h3>
+                    <span class="text-blue-500 bg-blue-100 px-2 py-1 rounded text-sm">MTD</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900 mt-2" id="successRate">0%</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-gray-500 text-sm font-medium">Avg Profit/Signal</h3>
+                    <span class="text-purple-500 bg-purple-100 px-2 py-1 rounded text-sm">Premium</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900 mt-2" id="avgProfit">₹0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-gray-500 text-sm font-medium">Active Signals</h3>
+                    <span class="text-yellow-500 bg-yellow-100 px-2 py-1 rounded text-sm">Now</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900 mt-2" id="activeSignals">0</p>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+                <h3 class="text-gray-500 text-sm font-medium mb-4">Performance History</h3>
+                <canvas id="performanceChart" height="200"></canvas>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+                <h3 class="text-gray-500 text-sm font-medium mb-4">Signal Distribution</h3>
+                <canvas id="signalDistChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Active Signals Table -->
+        <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100">
+                <h3 class="text-lg font-medium text-gray-900">Active Trading Signals</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Symbol</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Signal</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entry</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Target</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stop Loss</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">P&L</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" id="signalsTable">
+                        <!-- Signals will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- WebSocket Connection -->
+    <script>
+        const ws = new WebSocket('ws://' + window.location.host + '/ws/premium');
+        
+        ws.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            updateDashboard(data);
+        };
+
+        // Initialize charts
+        const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+        const performanceChart = new Chart(performanceCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Signal P&L',
+                    data: [],
+                    borderColor: 'rgb(99, 102, 241)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        const distributionCtx = document.getElementById('signalDistChart').getContext('2d');
+        const distributionChart = new Chart(distributionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: [
+                        'rgb(59, 130, 246)',
+                        'rgb(16, 185, 129)',
+                        'rgb(239, 68, 68)',
+                        'rgb(245, 158, 11)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        function updateDashboard(data) {
+            // Update stats
+            document.getElementById('signalsCount').textContent = data.stats.signals_today;
+            document.getElementById('successRate').textContent = data.stats.success_rate + '%';
+            document.getElementById('avgProfit').textContent = '₹' + data.stats.avg_profit;
+            document.getElementById('activeSignals').textContent = data.stats.active_signals;
+
+            // Update market status
+            const marketStatus = document.getElementById('marketStatus');
+            marketStatus.textContent = data.market_open ? 'Market Open' : 'Market Closed';
+            marketStatus.className = data.market_open
+                ? 'text-white px-3 py-1 rounded-full bg-green-500'
+                : 'text-white px-3 py-1 rounded-full bg-red-500';
+
+            // Update charts
+            updatePerformanceChart(data.performance);
+            updateDistributionChart(data.distribution);
+
+            // Update signals table
+            updateSignalsTable(data.active_signals);
+        }
+
+        function updateSignalsTable(signals) {
+            const table = document.getElementById('signalsTable');
+            table.innerHTML = '';
+            
+            signals.forEach(signal => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${new Date(signal.timestamp).toLocaleTimeString()}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        ${signal.option_symbol}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${signal.signal_type}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ₹${signal.option_entry_price}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ₹${signal.option_target_price}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ₹${signal.option_stop_loss}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm ${signal.profit >= 0 ? 'text-green-600' : 'text-red-600'}">
+                        ₹${signal.profit}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full
+                            ${getStatusClass(signal.status)}">
+                            ${signal.status}
+                        </span>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        }
+
+        function getStatusClass(status) {
+            switch (status) {
+                case 'ACTIVE':
+                    return 'bg-blue-100 text-blue-800';
+                case 'TARGET HIT':
+                    return 'bg-green-100 text-green-800';
+                case 'STOPPED OUT':
+                    return 'bg-red-100 text-red-800';
+                default:
+                    return 'bg-gray-100 text-gray-800';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Live Signals Dashboard - Elite FnO Trading</title>
+    
+    <!-- External Libraries -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
+    
+    <style>
+        :root {
+            /* Enhanced Color Palette */
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --bull-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --bear-gradient: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+            --warning-gradient: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+            --neutral-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            
+            /* Glass Morphism */
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            --glass-hover: rgba(255, 255, 255, 0.12);
+            
+            /* Text Colors */
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --text-success: #00f2fe;
+            --text-danger: #ff6a00;
+            --text-warning: #f2c94c;
+            
+            /* Background */
+            --bg-dark: #0a0a0f;
+            --bg-gradient: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            
+            /* Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 2rem;
+            --spacing-lg: 4rem;
+            
+            /* Animation */
+            --animation-fast: 0.3s;
+            --animation-normal: 0.5s;
+            --animation-slow: 0.8s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Glass Morphism Utilities */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 20px;
+        }
+
+        .glass-hover {
+            transition: all var(--animation-normal) ease;
+            cursor: pointer;
+        }
+
+        .glass-hover:hover {
+            background: var(--glass-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .dashboard-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Market Status Bar */
+        .market-status {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--card-bg);
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.live {
+            background: #00f2fe;
+        }
+
+        .status-indicator.closed {
+            background: #ff6a00;
+        }
+
+        .status-indicator.pre-open {
+            background: #f2c94c;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Filter Controls */
+        .filter-controls {
+            padding: 0 2rem 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all var(--animation-fast) ease;
+            border: 1px solid var(--glass-border);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        /* Signals Grid */
+        .signals-container {
+            padding: 0 2rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .signals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Signal Card */
+        .signal-card {
+            position: relative;
+            padding: 2rem;
+            border-radius: 24px;
+            border-left: 4px solid;
+            transition: all var(--animation-normal) ease;
+            animation: slideInUp 0.6s ease-out;
+            overflow: hidden;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .signal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            transition: opacity var(--animation-normal) ease;
+            z-index: -1;
+            border-radius: 24px;
+        }
+
+        .signal-card:hover::before {
+            opacity: 0.1;
+        }
+
+        /* Signal Types */
+        .signal-card.bullish {
+            border-left-color: #00f2fe;
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.08) 0%, rgba(17, 153, 142, 0.05) 100%);
+        }
+
+        .signal-card.bullish::before {
+            background: var(--bull-gradient);
+        }
+
+        .signal-card.bearish {
+            border-left-color: #ff6a00;
+            background: linear-gradient(135deg, rgba(255, 106, 0, 0.08) 0%, rgba(238, 9, 121, 0.05) 100%);
+        }
+
+        .signal-card.bearish::before {
+            background: var(--bear-gradient);
+        }
+
+        .signal-card.neutral {
+            border-left-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.05) 100%);
+        }
+
+        .signal-card.neutral::before {
+            background: var(--neutral-gradient);
+        }
+
+        /* Signal Header */
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .signal-symbol {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+        }
+
+        .signal-type {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .signal-time {
+            text-align: right;
+        }
+
+        .signal-timestamp {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .signal-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 0.3rem;
+        }
+
+        .signal-status.new {
+            background: rgba(0, 242, 254, 0.2);
+            color: #00f2fe;
+        }
+
+        .signal-status.active {
+            background: rgba(56, 239, 125, 0.2);
+            color: #38ef7d;
+        }
+
+        .signal-status.hit-target {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .signal-status.hit-sl {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+
+        /* Signal Action */
+        .signal-action {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .action-icon.buy {
+            background: var(--bull-gradient);
+            color: white;
+        }
+
+        .action-icon.sell {
+            background: var(--bear-gradient);
+            color: white;
+        }
+
+        .action-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .action-text.buy {
+            color: #00f2fe;
+        }
+
+        .action-text.sell {
+            color: #ff6a00;
+        }
+
+        /* Signal Details Grid */
+        .signal-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .detail-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .detail-value.price {
+            color: var(--text-primary);
+        }
+
+        .detail-value.target {
+            color: var(--text-success);
+        }
+
+        .detail-value.stop-loss {
+            color: var(--text-danger);
+        }
+
+        /* Confidence Meter */
+        .confidence-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .confidence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .confidence-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .confidence-score {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .confidence-bar {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            border-radius: 6px;
+            position: relative;
+            transition: width 1.5s ease-out;
+            background: linear-gradient(90deg, #ff6a00 0%, #f2c94c 50%, #00f2fe 100%);
+        }
+
+        .confidence-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* P&L Indicator */
+        .pnl-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .pnl-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .pnl-icon.profit {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .pnl-icon.loss {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+
+        .pnl-icon.neutral {
+            background: rgba(158, 158, 158, 0.2);
+            color: #9e9e9e;
+        }
+
+        .pnl-details {
+            flex: 1;
+        }
+
+        .pnl-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .pnl-amount.profit {
+            color: #4CAF50;
+        }
+
+        .pnl-amount.loss {
+            color: #f44336;
+        }
+
+        .pnl-percentage {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--animation-fast) ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-paper-trade {
+            background: var(--success-gradient);
+            color: white;
+        }
+
+        .btn-paper-trade:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 242, 254, 0.3);
+        }
+
+        .btn-view-chart {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-view-chart:hover {
+            background: var(--glass-hover);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .btn-close-trade {
+            background: var(--bear-gradient);
+            color: white;
+        }
+
+        .btn-close-trade:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 106, 0, 0.3);
+        }
+
+        /* Signal Source Badge */
+        .signal-source {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Load More Button */
+        .load-more {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .load-more-btn {
+            padding: 1rem 2rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--animation-normal) ease;
+        }
+
+        .load-more-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Floating Stats Panel */
+        .floating-stats {
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .stat-card {
+            padding: 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-success);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                padding: 1rem;
+            }
+            
+            .dashboard-title {
+                font-size: 2rem;
+            }
+            
+            .market-status {
+                gap: 1rem;
+            }
+            
+            .filter-controls {
+                padding: 0 1rem 1rem;
+                gap: 0.5rem;
+            }
+            
+            .signals-container {
+                padding: 0 1rem 1rem;
+            }
+            
+            .signals-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .signal-card {
+                padding: 1.5rem;
+            }
+            
+            .signal-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .floating-stats {
+                display: none;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        /* Loading States */
+        .loading-signal {
+            animation: pulse-loading 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-loading {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Success/Error Toast */
+        .toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            z-index: 10000;
+            transform: translateX(400px);
+            transition: transform var(--animation-normal) ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: var(--bull-gradient);
+            color: white;
+        }
+
+        .toast.error {
+            background: var(--bear-gradient);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">
+            <i class="fas fa-bolt"></i>
+            Live Signals Dashboard
+        </h1>
+        <p class="dashboard-subtitle">
+            Real-time FnO trading signals with AI-powered analysis and instant paper trading
+        </p>
+        
+        <!-- Market Status -->
+        <div class="market-status">
+            <div class="status-item">
+                <div class="status-indicator live"></div>
+                <span>Market: <strong>OPEN</strong></span>
+            </div>
+            <div class="status-item">
+                <div class="status-indicator live"></div>
+                <span>Nifty: <strong id="nifty-price">21,847.50</strong></span>
+            </div>
+            <div class="status-item">
+                <div class="status-indicator live"></div>
+                <span>Bank Nifty: <strong id="banknifty-price">45,329.80</strong></span>
+            </div>
+            <div class="status-item">
+                <span>Signals Today: <strong id="signals-count">47</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Controls -->
+    <div class="filter-controls">
+        <button class="filter-btn active" data-filter="all">All Signals</button>
+        <button class="filter-btn" data-filter="bullish">Bullish</button>
+        <button class="filter-btn" data-filter="bearish">Bearish</button>
+        <button class="filter-btn" data-filter="options">Options</button>
+        <button class="filter-btn" data-filter="futures">Futures</button>
+        <button class="filter-btn" data-filter="active">Active</button>
+        <button class="filter-btn" data-filter="completed">Completed</button>
+    </div>
+
+    <!-- Signals Container -->
+    <div class="signals-container">
+        <div class="signals-grid" id="signalsGrid">
+            <!-- Signals will be dynamically loaded here -->
+        </div>
+        
+        <div class="load-more">
+            <button class="load-more-btn" onclick="loadMoreSignals()">
+                <i class="fas fa-refresh"></i>
+                Load More Signals
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating Stats Panel -->
+    <div class="floating-stats">
+        <div class="stat-card">
+            <span class="stat-number" id="win-rate">87%</span>
+            <span class="stat-label">Win Rate</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number" id="active-trades">12</span>
+            <span class="stat-label">Active</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number" id="total-pnl">+₹24,580</span>
+            <span class="stat-label">P&L Today</span>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Sample signals data
+        const signalsData = [
+            {
+                id: 1,
+                symbol: 'NIFTY24JAN22000CE',
+                type: 'CE',
+                action: 'BUY',
+                sentiment: 'bullish',
+                entryPrice: 145.50,
+                currentPrice: 167.25,
+                targetPrice: 180.00,
+                stopLoss: 125.00,
+                quantity: 50,
+                confidence: 87,
+                timestamp: new Date(Date.now() - 300000), // 5 minutes ago
+                status: 'active',
+                source: 'AI Engine',
+                pnl: 1087.50,
+                pnlPercentage: 14.9
+            },
+            {
+                id: 2,
+                symbol: 'BANKNIFTY24JAN45000PE',
+                type: 'PE',
+                action: 'BUY',
+                sentiment: 'bearish',
+                entryPrice: 235.75,
+                currentPrice: 289.40,
+                targetPrice: 310.00,
+                stopLoss: 200.00,
+                quantity: 25,
+                confidence: 92,
+                timestamp: new Date(Date.now() - 600000), // 10 minutes ago
+                status: 'active',
+                source: 'OI Analysis',
+                pnl: 1341.25,
+                pnlPercentage: 22.7
+            },
+            {
+                id: 3,
+                symbol: 'NIFTYFUT',
+                type: 'FUTURE',
+                action: 'LONG',
+                sentiment: 'bullish',
+                entryPrice: 21845,
+                currentPrice: 21867,
+                targetPrice: 22100,
+                stopLoss: 21700,
+                quantity: 2,
+                confidence: 79,
+                timestamp: new Date(Date.now() - 900000), // 15 minutes ago
+                status: 'active',
+                source: 'Technical',
+                pnl: 550.00,
+                pnlPercentage: 1.26
+            },
+            {
+                id: 4,
+                symbol: 'NIFTY24JAN21800CE',
+                type: 'CE',
+                action: 'BUY',
+                sentiment: 'bullish',
+                entryPrice: 89.25,
+                currentPrice: 124.80,
+                targetPrice: 150.00,
+                stopLoss: 70.00,
+                quantity: 75,
+                confidence: 94,
+                timestamp: new Date(Date.now() - 1800000), // 30 minutes ago
+                status: 'hit-target',
+                source: 'Breakout',
+                pnl: 2666.25,
+                pnlPercentage: 39.8
+            },
+            {
+                id: 5,
+                symbol: 'BANKNIFTYFUT',
+                type: 'FUTURE',
+                action: 'SHORT',
+                sentiment: 'bearish',
+                entryPrice: 45380,
+                currentPrice: 45245,
+                targetPrice: 45000,
+                stopLoss: 45550,
+                quantity: 1,
+                confidence: 83,
+                timestamp: new Date(Date.now() - 1200000), // 20 minutes ago
+                status: 'active',
+                source: 'Pattern',
+                pnl: 675.00,
+                pnlPercentage: 2.97
+            },
+            {
+                id: 6,
+                symbol: 'NIFTY24JAN22200PE',
+                type: 'PE',
+                action: 'BUY',
+                sentiment: 'bearish',
+                entryPrice: 67.80,
+                currentPrice: 43.25,
+                targetPrice: 45.00,
+                stopLoss: 80.00,
+                quantity: 100,
+                confidence: 76,
+                timestamp: new Date(Date.now() - 2700000), // 45 minutes ago
+                status: 'hit-sl',
+                source: 'Momentum',
+                pnl: -2455.00,
+                pnlPercentage: -36.2
+            }
+        ];
+
+        // Global variables
+        let currentFilter = 'all';
+        let displayedSignals = [];
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSignals();
+            startRealTimeUpdates();
+            initializeFilters();
+            updateMarketData();
+        });
+
+        // Load signals based on current filter
+        function loadSignals() {
+            const filteredSignals = filterSignals(signalsData, currentFilter);
+            displayedSignals = filteredSignals;
+            renderSignals(filteredSignals);
+        }
+
+        // Filter signals
+        function filterSignals(signals, filter) {
+            switch(filter) {
+                case 'bullish':
+                    return signals.filter(s => s.sentiment === 'bullish');
+                case 'bearish':
+                    return signals.filter(s => s.sentiment === 'bearish');
+                case 'options':
+                    return signals.filter(s => s.type === 'CE' || s.type === 'PE');
+                case 'futures':
+                    return signals.filter(s => s.type === 'FUTURE');
+                case 'active':
+                    return signals.filter(s => s.status === 'active');
+                case 'completed':
+                    return signals.filter(s => s.status === 'hit-target' || s.status === 'hit-sl');
+                default:
+                    return signals;
+            }
+        }
+
+        // Render signals to DOM
+        function renderSignals(signals) {
+            const grid = document.getElementById('signalsGrid');
+            grid.innerHTML = '';
+
+            signals.forEach((signal, index) => {
+                const signalCard = createSignalCard(signal, index);
+                grid.appendChild(signalCard);
+            });
+
+            // Animate cards
+            gsap.fromTo('.signal-card', 
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 }
+            );
+        }
+
+        // Create signal card element
+        function createSignalCard(signal, index) {
+            const card = document.createElement('div');
+            card.className = `signal-card glass ${signal.sentiment} ${signal.status}`;
+            card.style.animationDelay = `${index * 0.1}s`;
+
+            const timeAgo = getTimeAgo(signal.timestamp);
+            const pnlClass = signal.pnl >= 0 ? 'profit' : 'loss';
+            const pnlIcon = signal.pnl >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+            const actionClass = signal.action === 'BUY' || signal.action === 'LONG' ? 'buy' : 'sell';
+            const actionIcon = actionClass === 'buy' ? 'fa-arrow-up' : 'fa-arrow-down';
+
+            card.innerHTML = `
+                <div class="signal-source">${signal.source}</div>
+                
+                <div class="signal-header">
+                    <div>
+                        <div class="signal-symbol">${signal.symbol}</div>
+                        <div class="signal-type">${signal.type}</div>
+                    </div>
+                    <div class="signal-time">
+                        <div class="signal-timestamp">${timeAgo}</div>
+                        <div class="signal-status ${signal.status}">
+                            <i class="fas fa-circle"></i>
+                            ${signal.status.replace('-', ' ')}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="signal-action">
+                    <div class="action-icon ${actionClass}">
+                        <i class="fas ${actionIcon}"></i>
+                    </div>
+                    <div class="action-text ${actionClass}">
+                        ${signal.action} ${signal.type}
+                    </div>
+                </div>
+
+                <div class="signal-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Entry</span>
+                        <span class="detail-value price">₹${signal.entryPrice.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Current</span>
+                        <span class="detail-value price">₹${signal.currentPrice.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Target</span>
+                        <span class="detail-value target">₹${signal.targetPrice.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Stop Loss</span>
+                        <span class="detail-value stop-loss">₹${signal.stopLoss.toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <div class="confidence-section">
+                    <div class="confidence-header">
+                        <span class="confidence-label">Confidence Level</span>
+                        <span class="confidence-score">${signal.confidence}%</span>
+                    </div>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: ${signal.confidence}%"></div>
+                    </div>
+                </div>
+
+                <div class="pnl-indicator">
+                    <div class="pnl-icon ${pnlClass}">
+                        <i class="fas ${pnlIcon}"></i>
+                    </div>
+                    <div class="pnl-details">
+                        <div class="pnl-amount ${pnlClass}">
+                            ${signal.pnl >= 0 ? '+' : ''}₹${Math.abs(signal.pnl).toFixed(2)}
+                        </div>
+                        <div class="pnl-percentage">
+                            ${signal.pnl >= 0 ? '+' : ''}${signal.pnlPercentage.toFixed(1)}%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    ${signal.status === 'active' ? `
+                        <button class="action-btn btn-paper-trade" onclick="paperTrade(${signal.id})">
+                            <i class="fas fa-play"></i>
+                            Paper Trade
+                        </button>
+                        <button class="action-btn btn-close-trade" onclick="closeTrade(${signal.id})">
+                            <i class="fas fa-times"></i>
+                            Close
+                        </button>
+                    ` : `
+                        <button class="action-btn btn-paper-trade" onclick="paperTrade(${signal.id})">
+                            <i class="fas fa-redo"></i>
+                            Trade Again
+                        </button>
+                        <button class="action-btn btn-view-chart" onclick="viewChart('${signal.symbol}')">
+                            <i class="fas fa-chart-line"></i>
+                            View Chart
+                        </button>
+                    `}
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Initialize filter buttons
+        function initializeFilters() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Update current filter and reload signals
+                    currentFilter = this.dataset.filter;
+                    loadSignals();
+                });
+            });
+        }
+
+        // Paper trade function
+        function paperTrade(signalId) {
+            const signal = signalsData.find(s => s.id === signalId);
+            if (!signal) return;
+
+            // Show loading state
+            const btn = event.target.closest('.btn-paper-trade');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                // Reset button
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+
+                // Show success toast
+                showToast(`Paper trade executed for ${signal.symbol}!`, 'success');
+                
+                // Update portfolio stats (mock)
+                updatePortfolioStats();
+            }, 1500);
+        }
+
+        // Close trade function
+        function closeTrade(signalId) {
+            const signal = signalsData.find(s => s.id === signalId);
+            if (!signal) return;
+
+            if (confirm(`Are you sure you want to close the ${signal.symbol} position?`)) {
+                // Update signal status
+                signal.status = 'closed';
+                
+                // Reload signals
+                loadSignals();
+                
+                showToast(`Position closed for ${signal.symbol}`, 'success');
+                updatePortfolioStats();
+            }
+        }
+
+        // View chart function
+        function viewChart(symbol) {
+            showToast(`Opening chart for ${symbol}...`, 'success');
+            // In a real app, this would open a chart modal or navigate to chart page
+        }
+
+        // Load more signals
+        function loadMoreSignals() {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                showToast('No more signals to load', 'success');
+            }, 1000);
+        }
+
+        // Start real-time updates
+        function startRealTimeUpdates() {
+            setInterval(() => {
+                updatePrices();
+                updateMarketData();
+            }, 3000);
+
+            setInterval(() => {
+                addNewSignal();
+            }, 30000); // Add new signal every 30 seconds
+        }
+
+        // Update prices for active signals
+        function updatePrices() {
+            displayedSignals.forEach(signal => {
+                if (signal.status === 'active') {
+                    // Simulate price movement
+                    const change = (Math.random() - 0.5) * 10;
+                    signal.currentPrice = Math.max(0, signal.currentPrice + change);
+                    
+                    // Update P&L
+                    if (signal.action === 'BUY' || signal.action === 'LONG') {
+                        signal.pnl = (signal.currentPrice - signal.entryPrice) * signal.quantity;
+                    } else {
+                        signal.pnl = (signal.entryPrice - signal.currentPrice) * signal.quantity;
+                    }
+                    
+                    signal.pnlPercentage = (signal.pnl / (signal.entryPrice * signal.quantity)) * 100;
+                }
+            });
+
+            // Re-render signals with updated prices
+            if (currentFilter === 'all' || currentFilter === 'active') {
+                loadSignals();
+            }
+        }
+
+        // Update market data
+        function updateMarketData() {
+            const niftyElement = document.getElementById('nifty-price');
+            const bankNiftyElement = document.getElementById('banknifty-price');
+            
+            // Simulate market data updates
+            const niftyChange = (Math.random() - 0.5) * 20;
+            const bankNiftyChange = (Math.random() - 0.5) * 50;
+            
+            const currentNifty = parseFloat(niftyElement.textContent.replace(',', ''));
+            const currentBankNifty = parseFloat(bankNiftyElement.textContent.replace(',', ''));
+            
+            const newNifty = currentNifty + niftyChange;
+            const newBankNifty = currentBankNifty + bankNiftyChange;
+            
+            niftyElement.textContent = newNifty.toLocaleString('en-IN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            
+            bankNiftyElement.textContent = newBankNifty.toLocaleString('en-IN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // Add new signal (simulation)
+        function addNewSignal() {
+            const newSignal = {
+                id: Date.now(),
+                symbol: 'NIFTY24JAN' + (21800 + Math.floor(Math.random() * 400)) + ['CE', 'PE'][Math.floor(Math.random() * 2)],
+                type: ['CE', 'PE', 'FUTURE'][Math.floor(Math.random() * 3)],
+                action: ['BUY', 'SELL'][Math.floor(Math.random() * 2)],
+                sentiment: ['bullish', 'bearish'][Math.floor(Math.random() * 2)],
+                entryPrice: 50 + Math.random() * 200,
+                currentPrice: 0,
+                targetPrice: 0,
+                stopLoss: 0,
+                quantity: 25 + Math.floor(Math.random() * 75),
+                confidence: 70 + Math.floor(Math.random() * 25),
+                timestamp: new Date(),
+                status: 'new',
+                source: ['AI Engine', 'OI Analysis', 'Technical', 'Breakout'][Math.floor(Math.random() * 4)],
+                pnl: 0,
+                pnlPercentage: 0
+            };
+
+            // Set current price same as entry initially
+            newSignal.currentPrice = newSignal.entryPrice;
+            
+            // Set target and stop loss based on sentiment
+            if (newSignal.sentiment === 'bullish') {
+                newSignal.targetPrice = newSignal.entryPrice * 1.25;
+                newSignal.stopLoss = newSignal.entryPrice * 0.85;
+            } else {
+                newSignal.targetPrice = newSignal.entryPrice * 0.75;
+                newSignal.stopLoss = newSignal.entryPrice * 1.15;
+            }
+
+            // Add to signals data
+            signalsData.unshift(newSignal);
+            
+            // Update signals count
+            const signalsCountElement = document.getElementById('signals-count');
+            signalsCountElement.textContent = parseInt(signalsCountElement.textContent) + 1;
+            
+            // Reload signals if showing all or new filter
+            if (currentFilter === 'all') {
+                loadSignals();
+                showToast(`New ${newSignal.sentiment} signal: ${newSignal.symbol}`, 'success');
+            }
+        }
+
+        // Update portfolio stats (mock)
+        function updatePortfolioStats() {
+            const winRateElement = document.getElementById('win-rate');
+            const activeTradesElement = document.getElementById('active-trades');
+            const totalPnlElement = document.getElementById('total-pnl');
+            
+            // Simulate stats updates
+            const currentWinRate = parseInt(winRateElement.textContent);
+            const newWinRate = Math.max(60, Math.min(95, currentWinRate + (Math.random() - 0.5) * 2));
+            winRateElement.textContent = Math.round(newWinRate) + '%';
+            
+            const currentActiveTrades = parseInt(activeTradesElement.textContent);
+            const newActiveTrades = Math.max(0, currentActiveTrades + (Math.random() > 0.5 ? 1 : -1));
+            activeTradesElement.textContent = newActiveTrades;
+            
+            const currentPnl = parseFloat(totalPnlElement.textContent.replace(/[₹,+]/g, ''));
+            const pnlChange = (Math.random() - 0.3) * 1000; // Bias towards positive
+            const newPnl = currentPnl + pnlChange;
+            totalPnlElement.textContent = (newPnl >= 0 ? '+' : '') + '₹' + Math.abs(newPnl).toLocaleString('en-IN', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+        }
+
+        // Utility function to get time ago
+        function getTimeAgo(timestamp) {
+            const now = new Date();
+            const diff = now - timestamp;
+            const minutes = Math.floor(diff / 60000);
+            
+            if (minutes < 1) return 'Just now';
+            if (minutes < 60) return `${minutes} min ago`;
+            
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours}h ago`;
+            
+            const days = Math.floor(hours / 24);
+            return `${days}d ago`;
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize tooltips and interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click animations
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('action-btn')) {
+                    const ripple = document.createElement('span');
+                    const rect = e.target.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+                    
+                    e.target.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

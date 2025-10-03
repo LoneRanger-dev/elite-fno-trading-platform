@@ -1,0 +1,550 @@
+/*
+🎬 Elite FnO Trading Platform - Animations & Effects
+Advanced animations, transitions, and visual effects
+*/
+
+/* === Background Animations === */
+@keyframes bgFloat {
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+    }
+    33% { 
+        transform: translateY(-30px) rotate(1deg); 
+    }
+    66% { 
+        transform: translateY(15px) rotate(-1deg); 
+    }
+}
+
+@keyframes matrixScroll {
+    0% { 
+        transform: translateY(0px); 
+    }
+    100% { 
+        transform: translateY(50px); 
+    }
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(0, 245, 255, 0.6);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes blink {
+    0%, 50% {
+        border-color: transparent;
+    }
+    51%, 100% {
+        border-color: var(--neon-blue);
+    }
+}
+
+/* === Bull/Bear Animations === */
+@keyframes bullRun {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        color: var(--success);
+    }
+    25% {
+        transform: translateY(-10px) rotate(5deg);
+    }
+    50% {
+        transform: translateY(-15px) rotate(0deg);
+        color: var(--neon-green);
+    }
+    75% {
+        transform: translateY(-10px) rotate(-5deg);
+    }
+    100% {
+        transform: translateY(0) rotate(0deg);
+        color: var(--success);
+    }
+}
+
+@keyframes bearFall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        color: var(--error);
+    }
+    25% {
+        transform: translateY(10px) rotate(-5deg);
+    }
+    50% {
+        transform: translateY(15px) rotate(0deg);
+        color: var(--neon-red);
+    }
+    75% {
+        transform: translateY(10px) rotate(5deg);
+    }
+    100% {
+        transform: translateY(0) rotate(0deg);
+        color: var(--error);
+    }
+}
+
+/* === Particle Effects === */
+@keyframes particleFloat {
+    0% {
+        transform: translateY(0px) translateX(0px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) translateX(50px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes sparkle {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* === Loading Animations === */
+@keyframes liquidLoad {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes waveLoad {
+    0%, 60%, 100% {
+        transform: initial;
+    }
+    30% {
+        transform: translateY(-15px);
+    }
+}
+
+/* === Hover Effects === */
+.hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl), 0 20px 40px rgba(0, 245, 255, 0.2);
+    transition: all var(--transition-normal);
+}
+
+.hover-glow:hover {
+    animation: pulseGlow 2s infinite;
+}
+
+.hover-shake:hover {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.hover-rotate:hover {
+    transform: rotate(5deg);
+    transition: transform var(--transition-normal);
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+    transition: transform var(--transition-normal);
+}
+
+/* === Text Effects === */
+.text-glow {
+    text-shadow: 
+        0 0 10px currentColor,
+        0 0 20px currentColor,
+        0 0 30px currentColor;
+}
+
+.text-neon {
+    color: var(--neon-blue);
+    text-shadow: 
+        0 0 5px var(--neon-blue),
+        0 0 10px var(--neon-blue),
+        0 0 15px var(--neon-blue),
+        0 0 20px var(--neon-blue);
+}
+
+.text-gradient {
+    background: var(--hero-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-typewriter {
+    overflow: hidden;
+    border-right: 2px solid var(--neon-blue);
+    white-space: nowrap;
+    margin: 0 auto;
+    animation: typing 3.5s steps(40, end), blink 0.75s step-end infinite;
+}
+
+/* === Background Effects === */
+.bg-animated {
+    position: relative;
+    overflow: hidden;
+}
+
+.bg-animated::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(0, 245, 255, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1) 0%, transparent 50%);
+    z-index: -2;
+    animation: bgFloat 12s ease-in-out infinite;
+}
+
+.bg-animated::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle at 2px 2px, rgba(0, 245, 255, 0.05) 1px, transparent 0);
+    background-size: 50px 50px;
+    z-index: -1;
+    animation: matrixScroll 25s linear infinite;
+}
+
+/* === Button Pulse Effect === */
+.btn-pulse {
+    animation: btnPulse 2s infinite;
+}
+
+@keyframes btnPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 245, 255, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 245, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 245, 255, 0);
+    }
+}
+
+/* === Status Animations === */
+.status-pulse {
+    animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.success-flash {
+    animation: successFlash 0.5s;
+}
+
+@keyframes successFlash {
+    0%, 100% {
+        background: transparent;
+    }
+    50% {
+        background: rgba(0, 255, 136, 0.2);
+    }
+}
+
+.error-flash {
+    animation: errorFlash 0.5s;
+}
+
+@keyframes errorFlash {
+    0%, 100% {
+        background: transparent;
+    }
+    50% {
+        background: rgba(255, 107, 107, 0.2);
+    }
+}
+
+/* === Trading Chart Animations === */
+.chart-line {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawLine 2s ease-in-out forwards;
+}
+
+@keyframes drawLine {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.price-up {
+    animation: priceUp 0.3s ease-out;
+    color: var(--success);
+}
+
+.price-down {
+    animation: priceDown 0.3s ease-out;
+    color: var(--error);
+}
+
+@keyframes priceUp {
+    0% {
+        transform: translateY(10px);
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes priceDown {
+    0% {
+        transform: translateY(-10px);
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* === Notification Animations === */
+.notification-enter {
+    animation: notificationEnter 0.3s ease-out;
+}
+
+.notification-exit {
+    animation: notificationExit 0.3s ease-in;
+}
+
+@keyframes notificationEnter {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes notificationExit {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* === Scroll Animations === */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.6s ease-out;
+}
+
+.scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.scroll-reveal-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.6s ease-out;
+}
+
+.scroll-reveal-left.revealed {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.scroll-reveal-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.6s ease-out;
+}
+
+.scroll-reveal-right.revealed {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* === Animation Utility Classes === */
+.animate-fadeInUp {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-fadeInDown {
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.animate-slideInLeft {
+    animation: slideInLeft 0.6s ease-out;
+}
+
+.animate-slideInRight {
+    animation: slideInRight 0.6s ease-out;
+}
+
+.animate-scaleIn {
+    animation: scaleIn 0.4s ease-out;
+}
+
+.animate-bounceIn {
+    animation: bounceIn 0.8s ease-out;
+}
+
+.animate-bullRun {
+    animation: bullRun 1s ease-in-out;
+}
+
+.animate-bearFall {
+    animation: bearFall 1s ease-in-out;
+}
+
+/* === Animation Delays === */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* === Performance Optimizations === */
+.gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+}
+
+.animate-paused {
+    animation-play-state: paused;
+}
+
+.animate-running {
+    animation-play-state: running;
+}
+
+/* === Reduced Motion Support === */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .bg-animated::before,
+    .bg-animated::after {
+        animation: none;
+    }
+    
+    .scroll-reveal,
+    .scroll-reveal-left,
+    .scroll-reveal-right {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}

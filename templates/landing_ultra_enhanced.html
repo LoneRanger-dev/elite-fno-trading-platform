@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Elite FnO Trading Platform - AI-Powered Options Trading</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-gradient: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --success: #00ff88;
+            --danger: #ff6b6b;
+            --warning: #ffa500;
+            --info: #00f5ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-gradient);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Advanced Background Effects */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .bg-gradient-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-gradient);
+            z-index: 1;
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.1;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-gradient);
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            background: var(--secondary-gradient);
+            top: 60%;
+            left: 80%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
+            top: 80%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Matrix Rain Effect */
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.03;
+        }
+
+        /* Glassmorphism Components */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+        }
+
+        .glass-intense {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 25px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(12, 12, 12, 0.95);
+            backdrop-filter: blur(30px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo i {
+            font-size: 2rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background: var(--accent-gradient);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+            background: var(--glass-bg);
+        }
+
+        .nav-links a:hover::before {
+            width: 80%;
+        }
+
+        .nav-cta {
+            padding: 0.8rem 1.5rem;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(79, 172, 254, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content {
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--info) 0%, #667eea 50%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--success);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 1s ease 0.8s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 15px 35px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 45px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            height: 600px;
+            animation: fadeInRight 1s ease 0.4s both;
+        }
+
+        .trading-dashboard-preview {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--glass-intense);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--success);
+            font-size: 0.9rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .signal-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .signal-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .signal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-gradient);
+            animation: slide 3s ease-in-out infinite;
+        }
+
+        @keyframes slide {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .signal-symbol {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .signal-type {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .buy-call {
+            background: linear-gradient(135deg, var(--success), #00cc6a);
+            color: #000;
+        }
+
+        .buy-put {
+            background: linear-gradient(135deg, var(--danger), #cc5555);
+            color: white;
+        }
+
+        .signal-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-label {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .features-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 6rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-description {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(79, 172, 254, 0.1), transparent);
+            animation: rotate 8s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(79, 172, 254, 0.2);
+            border-color: rgba(79, 172, 254, 0.3);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Performance Section */
+        .performance {
+            padding: 8rem 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+        }
+
+        .performance-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .performance-content h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: var(--secondary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .performance-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .perf-stat {
+            text-align: center;
+            padding: 2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .perf-stat:hover {
+            transform: translateY(-5px);
+        }
+
+        .perf-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .perf-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .performance-chart {
+            background: var(--glass-intense);
+            border-radius: 25px;
+            padding: 2rem;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(79, 172, 254, 0.1) 0%, 
+                rgba(102, 126, 234, 0.1) 50%, 
+                rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            position: relative;
+        }
+
+        .chart-line {
+            position: absolute;
+            bottom: 20%;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: var(--accent-gradient);
+            animation: drawLine 2s ease-in-out;
+        }
+
+        @keyframes drawLine {
+            from { width: 0; }
+            to { width: 80%; }
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--glass-intense);
+            padding: 4rem;
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--accent-gradient);
+            border-radius: 30px;
+            z-index: -1;
+            animation: borderGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes borderGlow {
+            from { opacity: 0.5; }
+            to { opacity: 1; }
+        }
+
+        .cta h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--accent-gradient);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--info);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-muted);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+            
+            .performance-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .performance-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Container -->
+    <div class="bg-container">
+        <div class="bg-gradient-overlay"></div>
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+    </div>
+
+    <!-- Matrix Rain Effect -->
+    <canvas class="matrix-rain" id="matrixCanvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-rocket"></i>
+                Elite FnO Trading
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#performance">Performance</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/test-system">Testing</a></li>
+            </ul>
+            <a href="/dashboard" class="nav-cta">
+                <i class="fas fa-chart-line"></i>
+                Launch Platform
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-bolt"></i>
+                    <span>AI-Powered Trading Signals</span>
+                </div>
+                
+                <h1 class="hero-title">
+                    Elite FnO Trading Platform
+                </h1>
+                
+                <p class="hero-subtitle">
+                    Revolutionary AI-powered options trading platform delivering premium FnO signals 
+                    with real-time market analysis, automated execution, and professional-grade tools 
+                    for serious traders.
+                </p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">87%</span>
+                        <span class="stat-label">Win Rate</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">2,500+</span>
+                        <span class="stat-label">Active Traders</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">₹45L+</span>
+                        <span class="stat-label">Total Profits</span>
+                    </div>
+                </div>
+                
+                <div class="hero-buttons">
+                    <a href="/dashboard" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i>
+                        Start Trading Now
+                    </a>
+                    <a href="/test-system" class="btn btn-secondary">
+                        <i class="fas fa-flask"></i>
+                        Test Platform
+                    </a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="trading-dashboard-preview">
+                    <div class="dashboard-header">
+                        <h3 class="dashboard-title">Live Trading Signals</h3>
+                        <div class="live-indicator">
+                            <div class="live-dot"></div>
+                            <span>LIVE</span>
+                        </div>
+                    </div>
+                    
+                    <div class="signal-cards">
+                        <div class="signal-card">
+                            <div class="signal-header">
+                                <span class="signal-symbol">NIFTY</span>
+                                <span class="signal-type buy-call">BUY CALL</span>
+                            </div>
+                            <div class="signal-details">
+                                <div class="detail-item">
+                                    <div class="detail-label">Entry</div>
+                                    <div class="detail-value">₹185.50</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Target</div>
+                                    <div class="detail-value">₹425.00</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Confidence</div>
+                                    <div class="detail-value">89%</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="signal-card">
+                            <div class="signal-header">
+                                <span class="signal-symbol">BANKNIFTY</span>
+                                <span class="signal-type buy-put">BUY PUT</span>
+                            </div>
+                            <div class="signal-details">
+                                <div class="detail-item">
+                                    <div class="detail-label">Entry</div>
+                                    <div class="detail-value">₹298.25</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Target</div>
+                                    <div class="detail-value">₹685.75</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Confidence</div>
+                                    <div class="detail-value">92%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <div class="section-header">
+                <div class="section-badge">🚀 Cutting-Edge Technology</div>
+                <h2 class="section-title">Powerful Trading Features</h2>
+                <p class="section-description">
+                    Advanced AI algorithms combined with real-time market data to deliver 
+                    the most accurate and profitable trading signals in the industry.
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="feature-title">AI-Powered Analysis</h3>
+                    <p class="feature-description">
+                        Advanced machine learning algorithms analyze thousands of market parameters, 
+                        historical patterns, and real-time data to generate high-probability trading signals 
+                        with exceptional accuracy.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="feature-title">Lightning-Fast Execution</h3>
+                    <p class="feature-description">
+                        Ultra-low latency signal delivery through multiple channels including Telegram, 
+                        web dashboard, and mobile notifications. Never miss a profitable trade opportunity 
+                        with our instant alert system.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Advanced Risk Management</h3>
+                    <p class="feature-description">
+                        Sophisticated risk management system with dynamic position sizing, 
+                        stop-loss optimization, and portfolio-level risk controls to protect 
+                        your capital and maximize returns.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Real-Time Market Data</h3>
+                    <p class="feature-description">
+                        Direct integration with leading market data providers for real-time NIFTY, 
+                        BANKNIFTY, and FINNIFTY data. Advanced charting tools and technical 
+                        indicators for comprehensive market analysis.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Multi-Platform Access</h3>
+                    <p class="feature-description">
+                        Access your trading platform from anywhere with our responsive web interface, 
+                        dedicated mobile apps, and Telegram bot integration. Trade on desktop, 
+                        tablet, or mobile seamlessly.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3 class="feature-title">Automated Testing Suite</h3>
+                    <p class="feature-description">
+                        Comprehensive backtesting and forward testing capabilities to validate 
+                        trading strategies. Real-time performance monitoring and detailed 
+                        analytics to optimize your trading performance.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Section -->
+    <section class="performance" id="performance">
+        <div class="performance-container">
+            <div class="performance-content">
+                <h2>Proven Track Record</h2>
+                <p>
+                    Our AI-powered trading system has consistently delivered exceptional results 
+                    across various market conditions. With advanced risk management and precise 
+                    signal generation, we've helped thousands of traders achieve their financial goals.
+                </p>
+                
+                <div class="performance-stats">
+                    <div class="perf-stat">
+                        <div class="perf-number">87.3%</div>
+                        <div class="perf-label">Win Rate</div>
+                    </div>
+                    <div class="perf-stat">
+                        <div class="perf-number">3.2x</div>
+                        <div class="perf-label">Avg R:R Ratio</div>
+                    </div>
+                    <div class="perf-stat">
+                        <div class="perf-number">₹2.8L</div>
+                        <div class="perf-label">Avg Monthly Profit</div>
+                    </div>
+                    <div class="perf-stat">
+                        <div class="perf-number">15%</div>
+                        <div class="perf-label">Max Drawdown</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="performance-chart">
+                <div class="chart-placeholder">
+                    <div>📈 Live Performance Chart</div>
+                    <div class="chart-line"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-container">
+            <h2>Ready to Transform Your Trading?</h2>
+            <p>
+                Join thousands of successful traders who have revolutionized their trading 
+                with our AI-powered platform. Start your journey to financial freedom today.
+            </p>
+            <div class="hero-buttons">
+                <a href="/dashboard" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    Start Trading Now
+                </a>
+                <a href="/test-system" class="btn btn-secondary">
+                    <i class="fas fa-flask"></i>
+                    Test Platform Free
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>Elite FnO Trading</h3>
+                <p>
+                    The most advanced AI-powered options trading platform designed for 
+                    serious traders who demand excellence and superior returns.
+                </p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="/dashboard">Trading Dashboard</a></li>
+                    <li><a href="/test-system">Testing Suite</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#performance">Performance</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">API Reference</a></li>
+                    <li><a href="#">Tutorials</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Community</a></li>
+                    <li><a href="#">Status</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Elite FnO Trading Platform. All rights reserved.</p>
+            <p>Professional AI-powered trading solutions for advanced traders.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
+        const matrixArray = matrix.split("");
+
+        const fontSize = 10;
+        const columns = canvas.width / fontSize;
+
+        const drops = [];
+        for(let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(12, 12, 12, 0.04)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#00f5ff';
+            ctx.font = fontSize + 'px monospace';
+
+            for(let i = 0; i < drops.length; i++) {
+                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Dynamic typing effect for hero title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            function typing() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typing, speed);
+                }
+            }
+            typing();
+        }
+
+        // Particle system
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+                this.color = `hsl(${Math.random() * 60 + 180}, 100%, 50%)`;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.1;
+            }
+
+            draw(ctx) {
+                ctx.fillStyle = this.color;
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        // Add interactive particles on mouse move
+        let particles = [];
+        document.addEventListener('mousemove', function(e) {
+            particles.push(new Particle(e.clientX, e.clientY));
+        });
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw(ctx);
+                
+                if (particles[i].size <= 0.2) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading animation
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

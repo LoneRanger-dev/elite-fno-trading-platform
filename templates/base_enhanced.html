@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO Meta Tags -->
+    <title>{% block title %}🚀 Elite FnO Trading Platform - AI-Powered Options Trading{% endblock %}</title>
+    <meta name="description" content="{% block description %}Master the market with AI-powered FnO signals, real-time analytics, and professional trading tools. Join elite traders and maximize your profits with our advanced platform.{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}FnO trading, options trading, AI trading signals, stock market, trading platform, financial analytics, futures and options{% endblock %}">
+    <meta name="author" content="Elite FnO Trading Platform">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{% block og_url %}{{ request.url }}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}🚀 Elite FnO Trading Platform - AI-Powered Options Trading{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Master the market with AI-powered FnO signals, real-time analytics, and professional trading tools.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ url_for('static', filename='images/og-image.jpg') }}{% endblock %}">
+    <meta property="og:site_name" content="Elite FnO Trading Platform">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{% block twitter_url %}{{ request.url }}{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}🚀 Elite FnO Trading Platform - AI-Powered Options Trading{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Master the market with AI-powered FnO signals, real-time analytics, and professional trading tools.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ url_for('static', filename='images/twitter-image.jpg') }}{% endblock %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+    
+    <!-- Preconnect to external domains for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://checkout.razorpay.com">
+    
+    <!-- Font Loading with display swap for better performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icon Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    
+    <!-- Page-specific CSS -->
+    {% block extra_css %}{% endblock %}
+    
+    <!-- Critical CSS for above-the-fold content -->
+    <style>
+        /* Critical styles to prevent FOUC */
+        body {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        body.loaded {
+            opacity: 1;
+        }
+        
+        /* Loading screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--glass-border);
+            border-top: 3px solid var(--neon-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FinancialService",
+        "name": "Elite FnO Trading Platform",
+        "description": "AI-powered options trading platform with real-time signals and analytics",
+        "url": "{{ request.url_root }}",
+        "logo": "{{ url_for('static', filename='images/logo.png', _external=True) }}",
+        "sameAs": [
+            "https://twitter.com/elitefnotrading",
+            "https://linkedin.com/company/elitefnotrading"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+91-XXXXXXXXXX",
+            "contactType": "customer service",
+            "availableLanguage": ["English", "Hindi"]
+        },
+        "areaServed": "IN",
+        "serviceType": "Financial Trading Platform"
+    }
+    </script>
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-animated">
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Skip to main content (accessibility) -->
+    <a href="#main-content" class="sr-only">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="container">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="{{ url_for('premium_landing') }}" class="nav-brand" aria-label="Elite FnO Trading Platform Home">
+                    {% block logo %}
+                    <i class="fas fa-chart-line"></i>
+                    Elite<span class="text-neon">FnO</span>
+                    {% endblock %}
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center gap-8">
+                    <div class="flex items-center gap-6">
+                        {% block nav_links %}
+                        <a href="#features" class="nav-link">Features</a>
+                        <a href="#pricing" class="nav-link">Pricing</a>
+                        <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+                        <a href="{{ url_for('paper_trading_page') }}" class="nav-link">Paper Trading</a>
+                        {% endblock %}
+                    </div>
+                    
+                    <div class="flex items-center gap-4">
+                        {% block nav_actions %}
+                        <a href="#" class="btn btn-ghost btn-sm">Login</a>
+                        <a href="#pricing" class="btn btn-primary btn-sm">Get Started</a>
+                        {% endblock %}
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden mobile-menu-button btn btn-ghost btn-sm" aria-label="Toggle mobile menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay"></div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <div class="mobile-menu-header">
+            <a href="{{ url_for('premium_landing') }}" class="nav-brand">
+                <i class="fas fa-chart-line"></i>
+                Elite<span class="text-neon">FnO</span>
+            </a>
+            <button class="mobile-menu-close btn btn-ghost btn-sm" aria-label="Close mobile menu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="mobile-menu-content">
+            {% block mobile_nav_links %}
+            <a href="#features" class="mobile-nav-link">
+                <i class="fas fa-star"></i>
+                Features
+            </a>
+            <a href="#pricing" class="mobile-nav-link">
+                <i class="fas fa-tags"></i>
+                Pricing
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="mobile-nav-link">
+                <i class="fas fa-chart-area"></i>
+                Dashboard
+            </a>
+            <a href="{{ url_for('paper_trading') }}" class="mobile-nav-link">
+                <i class="fas fa-paper-plane"></i>
+                Paper Trading
+            </a>
+            {% endblock %}
+            
+            <div class="mobile-menu-actions">
+                <a href="#" class="btn btn-secondary btn-lg w-full mb-4">Login</a>
+                <a href="#pricing" class="btn btn-primary btn-lg w-full">Get Started</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        {% block content %}
+        <!-- Page content goes here -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        {% block footer %}
+        <div class="container">
+            <div class="grid grid-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Elite FnO</h3>
+                    <p class="text-secondary mb-4">AI-powered options trading platform for elite traders.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-secondary hover:text-primary" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-secondary hover:text-primary" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-secondary hover:text-primary" aria-label="Telegram">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Platform</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-secondary hover:text-primary">Features</a></li>
+                        <li><a href="#" class="text-secondary hover:text-primary">Pricing</a></li>
+                        <li><a href="#" class="text-secondary hover:text-primary">API</a></li>
+                        <li><a href="#" class="text-secondary hover:text-primary">Documentation</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-secondary hover:text-primary">Help Center</a></li>
+                        <li><a href="#" class="text-secondary hover:text-primary">Contact Us</a></li>
+                        <li><a href="#" class="text-secondary hover:text-primary">Status</a></li>
+                        <li><a href="#" class="text-secondary hover:text-primary">Community</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-secondary hover:text-primary">Privacy Policy</a></li>
+                        <li><a href="#" class="text-secondary hover:text-primary">Terms of Service</a></li>
+                        <li><a href="#" class="text-secondary hover:text-primary">Risk Disclosure</a></li>
+                        <li><a href="#" class="text-secondary hover:text-primary">SEBI Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-glass-border pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-secondary text-sm">
+                        © {{ current_year }} Elite FnO Trading Platform. All rights reserved.
+                    </p>
+                    <p class="text-secondary text-sm mt-4 md:mt-0">
+                        <strong>Risk Warning:</strong> Trading in F&O involves substantial risk and may not be suitable for all investors.
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top btn btn-primary" aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Notification Container -->
+    <div class="notification-container" aria-live="polite"></div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha512-gsm9Vd1VODR9/afwXKJ3+BTNUk+O0+2O7sHKoNTmTF0CYL7sYZhFD/POvuabgJRdWNKGYjp/JsPu3fhEo7zHOg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" integrity="sha512-Ic9xkERjyZ1xgJ5svx3y0u3xrvfT/uPkV99LBwe68xjy/mGtO+4eURHZBW2xW4SZbFrF1Tf090XqB+EVgXnVjw==" crossorigin="anonymous"></script>
+    
+    {% if razorpay_enabled %}
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    {% endif %}
+    
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <!-- Page-specific JavaScript -->
+    {% block extra_js %}{% endblock %}
+
+    <!-- Initialize App -->
+    <script>
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loading screen
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 500);
+            
+            // Initialize scroll to top button
+            const scrollToTopButton = document.querySelector('.scroll-to-top');
+            if (scrollToTopButton) {
+                scrollToTopButton.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            // Initialize mobile menu close button
+            const mobileMenuClose = document.querySelector('.mobile-menu-close');
+            if (mobileMenuClose) {
+                mobileMenuClose.addEventListener('click', () => {
+                    eliteFnOApp.closeMobileMenu();
+                });
+            }
+        });
+        
+        // Global error handling
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e.error);
+        });
+        
+        // Service worker registration (if available)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(function(registrationError) {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+
+    <!-- Additional Styles for Mobile Menu -->
+    <style>
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+        }
+        
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--glass-border);
+            z-index: 1000;
+            transition: right var(--transition-normal);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mobile-menu.active {
+            right: 0;
+        }
+        
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .mobile-menu-content {
+            flex: 1;
+            padding: var(--space-4);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-2);
+        }
+        
+        .mobile-nav-link:hover {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+        }
+        
+        .mobile-menu-actions {
+            margin-top: auto;
+            padding-top: var(--space-6);
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all var(--transition-normal);
+            z-index: 1000;
+        }
+        
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu {
+                width: 280px;
+            }
+        }
+    </style>
+
+    <!-- Dark Mode Toggle -->
+    <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+        }
+
+        [data-theme="dark"] {
+            --background-color: #000000;
+            --text-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggle = document.createElement('button');
+            toggle.textContent = 'Toggle Dark Mode';
+            toggle.style.position = 'fixed';
+            toggle.style.bottom = '10px';
+            toggle.style.right = '10px';
+            toggle.style.zIndex = '1000';
+            document.body.appendChild(toggle);
+
+            toggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
+
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+    </script>
+</body>
+</html>

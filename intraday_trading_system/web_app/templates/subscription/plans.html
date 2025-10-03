@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Plans - Trading Bot System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .pricing-card {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pricing-card.featured {
+            border-color: #1a237e;
+            transform: scale(1.05);
+        }
+        
+        .pricing-header {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            margin: -1px -1px 0 -1px;
+        }
+        
+        .pricing-card.featured .pricing-header {
+            background: linear-gradient(135deg, #f44336 0%, #e91e63 100%);
+        }
+        
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        
+        .price-period {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .btn-premium {
+            background: linear-gradient(45deg, #1a237e, #3949ab);
+            border: none;
+            padding: 12px 30px;
+            font-weight: bold;
+        }
+        
+        .btn-premium:hover {
+            background: linear-gradient(45deg, #0d47a1, #1976d2);
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: #f44336;
+            color: white;
+            padding: 5px 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: rotate(45deg);
+            z-index: 10;
+        }
+        
+        .benefit-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            height: 100%;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .benefit-icon {
+            font-size: 2.5rem;
+            color: #1a237e;
+            margin-bottom: 1rem;
+        }
+        
+        .testimonial {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin: 1rem 0;
+        }
+        
+        .guarantee-banner {
+            background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-chart-line me-2"></i>Trading Bot
+            </a>
+            <div class="navbar-nav ms-auto">
+                {% if user %}
+                    <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a class="nav-link" href="{{ url_for('account') }}">Account</a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <!-- Header Section -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold">Choose Your Premium Plan</h1>
+            <p class="lead text-muted">Get access to live intraday trading signals with precise entry/exit points</p>
+            
+            {% if user and user.subscription_status == 'active' %}
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>
+                    You currently have an active premium subscription!
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Pricing Plans -->
+        <div class="row justify-content-center mb-5">
+            {% for plan in plans %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="pricing-card card h-100 {% if plan.name == 'Quarterly Premium' %}featured{% endif %}">
+                    {% if plan.name == 'Quarterly Premium' %}
+                        <div class="popular-badge">POPULAR</div>
+                    {% endif %}
+                    
+                    <div class="pricing-header">
+                        <h3 class="card-title">{{ plan.name }}</h3>
+                        <div class="price">
+                            ₹{{ "%.0f"|format(plan.price) }}
+                            <span class="price-period">
+                                /{{ plan.duration_days }} days
+                            </span>
+                        </div>
+                        {% if plan.duration_days == 90 %}
+                            <small class="text-light">Save 15% vs Monthly</small>
+                        {% elif plan.duration_days == 365 %}
+                            <small class="text-light">Save 33% vs Monthly</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            {% for feature in plan.features %}
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                {{ feature }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <div class="card-footer bg-transparent">
+                        {% if user %}
+                            {% if user.subscription_status == 'active' %}
+                                <button class="btn btn-outline-secondary w-100" disabled>
+                                    Current Plan Active
+                                </button>
+                            {% else %}
+                                <a href="{{ url_for('payment', plan_id=plan.id) }}" class="btn btn-premium btn-primary w-100">
+                                    <i class="fas fa-credit-card me-2"></i>Subscribe Now
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{{ url_for('register') }}" class="btn btn-premium btn-primary w-100">
+                                <i class="fas fa-user-plus me-2"></i>Sign Up to Subscribe
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Money Back Guarantee -->
+        <div class="guarantee-banner">
+            <h4><i class="fas fa-shield-alt me-2"></i>7-Day Money Back Guarantee</h4>
+            <p class="mb-0">Not satisfied? Get a full refund within 7 days, no questions asked!</p>
+        </div>
+
+        <!-- Premium Benefits -->
+        <div class="row mb-5">
+            <div class="col-12 text-center mb-4">
+                <h2 class="fw-bold">Why Choose Premium?</h2>
+                <p class="text-muted">Get everything you need for successful intraday trading</p>
+            </div>
+            
+            {% for benefit in benefits %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="benefit-card">
+                    <div class="benefit-icon">{{ benefit.icon }}</div>
+                    <h5 class="fw-bold">{{ benefit.title }}</h5>
+                    <p class="text-muted">{{ benefit.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Live Signal Example -->
+        <div class="row mb-5">
+            <div class="col-12 text-center mb-4">
+                <h2 class="fw-bold">Live Signal Example</h2>
+                <p class="text-muted">Here's what you'll receive during market hours</p>
+            </div>
+            
+            <div class="col-lg-6 mx-auto">
+                <div class="card border-primary">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Live Trading Signal</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="signal-example">
+                            <div class="row">
+                                <div class="col-6">
+                                    <strong>🚀 BUY Signal - NIFTY</strong><br>
+                                    <small class="text-muted">10:30 AM IST</small>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <span class="badge bg-success">85% Confidence</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-4">
+                                    <strong>💰 Entry:</strong><br>
+                                    ₹19,500
+                                </div>
+                                <div class="col-4">
+                                    <strong>🎯 Target:</strong><br>
+                                    ₹19,650 (+150)
+                                </div>
+                                <div class="col-4">
+                                    <strong>🛡️ Stop Loss:</strong><br>
+                                    ₹19,400 (-100)
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="text-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-chart-line me-1"></i>Based on RSI, MACD & Bollinger Bands analysis
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="row mb-5">
+            <div class="col-12 text-center mb-4">
+                <h2 class="fw-bold">What Our Traders Say</h2>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="testimonial">
+                    <div class="mb-3">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                    </div>
+                    <p>"Amazing accuracy! Made ₹15,000 profit in just 2 weeks with their signals."</p>
+                    <footer class="blockquote-footer">Rajesh Kumar, <cite>Mumbai</cite></footer>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="testimonial">
+                    <div class="mb-3">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                    </div>
+                    <p>"Perfect timing on entries and exits. Best investment I made this year!"</p>
+                    <footer class="blockquote-footer">Priya Sharma, <cite>Delhi</cite></footer>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="testimonial">
+                    <div class="mb-3">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                    </div>
+                    <p>"85%+ win rate! Their risk management is excellent. Highly recommended."</p>
+                    <footer class="blockquote-footer">Amit Patel, <cite>Bangalore</cite></footer>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h2 class="fw-bold">Frequently Asked Questions</h2>
+            </div>
+            
+            <div class="col-lg-8 mx-auto">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                When do I receive trading signals?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Live signals are sent during market hours (9:15 AM - 3:30 PM IST) on trading days (Monday-Friday). You'll receive instant notifications via Telegram and web dashboard.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                What is the accuracy rate?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Our signals maintain an 85%+ accuracy rate based on advanced technical analysis using multiple indicators. However, trading involves risk and past performance doesn't guarantee future results.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Can I cancel anytime?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Yes! You can cancel your subscription anytime. You'll continue to receive signals until your current subscription period ends. We also offer a 7-day money-back guarantee.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                How do I receive notifications?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Signals are delivered instantly via Telegram notifications and are also available on your web dashboard. Make sure to join our Telegram channel after subscribing.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        {% if not user %}
+        <div class="text-center mt-5">
+            <h3>Ready to Start Trading?</h3>
+            <p class="text-muted mb-4">Join thousands of successful traders today</p>
+            <a href="{{ url_for('register') }}" class="btn btn-premium btn-primary btn-lg">
+                <i class="fas fa-user-plus me-2"></i>Create Free Account
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2025 Trading Bot System. All rights reserved.</p>
+            <p>
+                <a href="#" class="text-white-50 me-3">Terms of Service</a>
+                <a href="#" class="text-white-50 me-3">Privacy Policy</a>
+                <a href="#" class="text-white-50">Support</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

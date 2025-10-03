@@ -1,0 +1,693 @@
+{% extends "base_enhanced.html" %}
+
+{% block title %}🚀 Elite FnO Trading Platform - Premium AI-Powered Options Trading{% endblock %}
+{% block description %}Join the elite with our AI-powered FnO trading platform. Get real-time signals, advanced analytics, and maximize your trading profits with professional-grade tools.{% endblock %}
+{% block keywords %}premium FnO trading, AI trading signals, options trading platform, professional trading tools, real-time market data, trading analytics{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Hero section specific styles */
+    .hero-section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        padding: var(--space-20) 0;
+    }
+    
+    .hero-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -1;
+    }
+    
+    .hero-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--space-8);
+        margin: var(--space-16) 0;
+    }
+    
+    .feature-card {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: var(--radius-xl);
+        background: var(--accent-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--text-2xl);
+        margin-bottom: var(--space-4);
+        box-shadow: var(--shadow-neon);
+    }
+    
+    .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: var(--space-8);
+        margin: var(--space-16) 0;
+    }
+    
+    .pricing-card {
+        position: relative;
+        text-align: center;
+        padding: var(--space-8);
+    }
+    
+    .pricing-card.featured {
+        border: 2px solid var(--neon-blue);
+        box-shadow: var(--shadow-neon);
+        transform: scale(1.05);
+    }
+    
+    .pricing-badge {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--accent-gradient);
+        color: white;
+        padding: var(--space-2) var(--space-4);
+        border-radius: var(--radius-full);
+        font-size: var(--text-sm);
+        font-weight: var(--font-bold);
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--space-6);
+        margin: var(--space-12) 0;
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: var(--space-6);
+        background: var(--glass-bg);
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--glass-border);
+    }
+    
+    .stat-number {
+        font-size: var(--text-4xl);
+        font-weight: var(--font-bold);
+        color: var(--neon-blue);
+        margin-bottom: var(--space-2);
+    }
+    
+    .testimonial-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-xl);
+        padding: var(--space-6);
+        text-align: left;
+    }
+    
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+        margin-top: var(--space-4);
+    }
+    
+    .author-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--accent-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: var(--font-bold);
+        color: white;
+    }
+    
+    .cta-section {
+        background: var(--dark-gradient);
+        padding: var(--space-20) 0;
+        text-align: center;
+        margin-top: var(--space-20);
+    }
+    
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: var(--space-16) 0;
+        }
+        
+        .feature-grid,
+        .pricing-grid {
+            grid-template-columns: 1fr;
+            gap: var(--space-6);
+        }
+        
+        .pricing-card.featured {
+            transform: none;
+        }
+        
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-animated" id="hero">
+    <div class="hero-background">
+        <canvas id="hero-particles" class="hero-particles"></canvas>
+    </div>
+    
+    <div class="container">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="hero-title animate-fadeInUp">
+                Master the Market with 
+                <span class="text-gradient">AI-Powered</span> 
+                FnO Signals
+            </h1>
+            
+            <p class="hero-subtitle animate-fadeInUp delay-200">
+                Join the elite traders using our advanced AI algorithms to generate high-accuracy trading signals, 
+                real-time market analytics, and professional-grade trading tools for maximum profits.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fadeInUp delay-400">
+                <a href="#pricing" class="btn btn-primary btn-xl hover-lift">
+                    <i class="fas fa-rocket"></i>
+                    Start Premium Trial
+                </a>
+                <a href="#features" class="btn btn-secondary btn-xl hover-lift">
+                    <i class="fas fa-play-circle"></i>
+                    Watch Demo
+                </a>
+            </div>
+            
+            <!-- Trust Indicators -->
+            <div class="stats-grid animate-fadeInUp delay-600">
+                <div class="stat-item">
+                    <div class="stat-number" data-count="1247">0</div>
+                    <div class="text-secondary">Active Traders</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="87.3">0</div>
+                    <div class="text-secondary">Win Rate %</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="452">0</div>
+                    <div class="text-secondary">Crores Profit</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="23">0</div>
+                    <div class="text-secondary">Signals Today</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-20">
+    <div class="container">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold mb-6 scroll-reveal">
+                Why Elite Traders Choose Our Platform
+            </h2>
+            <p class="text-xl text-secondary max-w-3xl mx-auto scroll-reveal">
+                Advanced AI algorithms combined with real-time market data to give you the edge in FnO trading
+            </p>
+        </div>
+        
+        <div class="feature-grid">
+            <div class="feature-card glass-card hover-lift scroll-reveal" data-delay="100">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3 class="text-2xl font-semibold mb-4">AI-Powered Signals</h3>
+                <p class="text-secondary mb-4">
+                    Our proprietary AI analyzes market patterns, volume, and trends to generate high-accuracy trading signals with real-time alerts.
+                </p>
+                <ul class="text-sm text-secondary space-y-2">
+                    <li><i class="fas fa-check text-success"></i> 87.3% average accuracy</li>
+                    <li><i class="fas fa-check text-success"></i> Real-time Telegram alerts</li>
+                    <li><i class="fas fa-check text-success"></i> Entry/Exit/SL levels</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card glass-card hover-lift scroll-reveal" data-delay="200">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-area"></i>
+                </div>
+                <h3 class="text-2xl font-semibold mb-4">Advanced Analytics</h3>
+                <p class="text-secondary mb-4">
+                    Professional-grade charts, technical indicators, and market analysis tools to make informed trading decisions.
+                </p>
+                <ul class="text-sm text-secondary space-y-2">
+                    <li><i class="fas fa-check text-success"></i> Real-time price data</li>
+                    <li><i class="fas fa-check text-success"></i> 50+ technical indicators</li>
+                    <li><i class="fas fa-check text-success"></i> Custom strategy builder</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card glass-card hover-lift scroll-reveal" data-delay="300">
+                <div class="feature-icon">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+                <h3 class="text-2xl font-semibold mb-4">Paper Trading</h3>
+                <p class="text-secondary mb-4">
+                    Practice and test strategies risk-free with our comprehensive paper trading simulator before going live.
+                </p>
+                <ul class="text-sm text-secondary space-y-2">
+                    <li><i class="fas fa-check text-success"></i> Virtual ₹10 lakh portfolio</li>
+                    <li><i class="fas fa-check text-success"></i> Real market conditions</li>
+                    <li><i class="fas fa-check text-success"></i> Performance tracking</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card glass-card hover-lift scroll-reveal" data-delay="400">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="text-2xl font-semibold mb-4">Risk Management</h3>
+                <p class="text-secondary mb-4">
+                    Built-in risk management tools with automatic stop-loss, position sizing, and portfolio protection features.
+                </p>
+                <ul class="text-sm text-secondary space-y-2">
+                    <li><i class="fas fa-check text-success"></i> Auto stop-loss alerts</li>
+                    <li><i class="fas fa-check text-success"></i> Position sizing calculator</li>
+                    <li><i class="fas fa-check text-success"></i> Drawdown protection</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card glass-card hover-lift scroll-reveal" data-delay="500">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3 class="text-2xl font-semibold mb-4">Mobile Optimized</h3>
+                <p class="text-secondary mb-4">
+                    Trade on-the-go with our fully responsive platform optimized for mobile devices and tablets.
+                </p>
+                <ul class="text-sm text-secondary space-y-2">
+                    <li><i class="fas fa-check text-success"></i> Progressive Web App</li>
+                    <li><i class="fas fa-check text-success"></i> Offline capabilities</li>
+                    <li><i class="fas fa-check text-success"></i> Push notifications</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card glass-card hover-lift scroll-reveal" data-delay="600">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="text-2xl font-semibold mb-4">Elite Community</h3>
+                <p class="text-secondary mb-4">
+                    Join our exclusive community of successful traders sharing insights, strategies, and market analysis.
+                </p>
+                <ul class="text-sm text-secondary space-y-2">
+                    <li><i class="fas fa-check text-success"></i> Private Telegram group</li>
+                    <li><i class="fas fa-check text-success"></i> Expert market calls</li>
+                    <li><i class="fas fa-check text-success"></i> 24/7 support</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section id="pricing" class="py-20 bg-animated">
+    <div class="container">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold mb-6 scroll-reveal">
+                Choose Your Trading Plan
+            </h2>
+            <p class="text-xl text-secondary max-w-3xl mx-auto scroll-reveal">
+                Flexible pricing plans designed for traders at every level
+            </p>
+        </div>
+        
+        <div class="pricing-grid">
+            <!-- Basic Plan -->
+            <div class="pricing-card glass-card hover-lift scroll-reveal" data-delay="100">
+                <h3 class="text-2xl font-semibold mb-4">Basic</h3>
+                <div class="mb-6">
+                    <span class="text-4xl font-bold">₹999</span>
+                    <span class="text-secondary">/month</span>
+                </div>
+                <ul class="text-left space-y-3 mb-8">
+                    <li><i class="fas fa-check text-success"></i> 5 AI signals per day</li>
+                    <li><i class="fas fa-check text-success"></i> Basic technical analysis</li>
+                    <li><i class="fas fa-check text-success"></i> Email alerts</li>
+                    <li><i class="fas fa-check text-success"></i> Mobile app access</li>
+                    <li><i class="fas fa-check text-success"></i> Community support</li>
+                </ul>
+                <button class="btn btn-secondary btn-lg w-full" onclick="startSubscription('basic')">
+                    Start Free Trial
+                </button>
+            </div>
+            
+            <!-- Premium Plan (Featured) -->
+            <div class="pricing-card glass-card hover-lift featured scroll-reveal" data-delay="200">
+                <div class="pricing-badge">Most Popular</div>
+                <h3 class="text-2xl font-semibold mb-4">Premium</h3>
+                <div class="mb-6">
+                    <span class="text-4xl font-bold text-neon">₹2999</span>
+                    <span class="text-secondary">/month</span>
+                </div>
+                <ul class="text-left space-y-3 mb-8">
+                    <li><i class="fas fa-check text-success"></i> Unlimited AI signals</li>
+                    <li><i class="fas fa-check text-success"></i> Advanced analytics</li>
+                    <li><i class="fas fa-check text-success"></i> Real-time Telegram alerts</li>
+                    <li><i class="fas fa-check text-success"></i> Paper trading simulator</li>
+                    <li><i class="fas fa-check text-success"></i> Risk management tools</li>
+                    <li><i class="fas fa-check text-success"></i> Priority support</li>
+                </ul>
+                <button class="btn btn-primary btn-lg w-full btn-pulse" onclick="startSubscription('premium')">
+                    Start Premium Trial
+                </button>
+            </div>
+            
+            <!-- Elite Plan -->
+            <div class="pricing-card glass-card hover-lift scroll-reveal" data-delay="300">
+                <h3 class="text-2xl font-semibold mb-4">Elite</h3>
+                <div class="mb-6">
+                    <span class="text-4xl font-bold">₹4999</span>
+                    <span class="text-secondary">/month</span>
+                </div>
+                <ul class="text-left space-y-3 mb-8">
+                    <li><i class="fas fa-check text-success"></i> Everything in Premium</li>
+                    <li><i class="fas fa-check text-success"></i> Custom strategy building</li>
+                    <li><i class="fas fa-check text-success"></i> 1-on-1 mentoring sessions</li>
+                    <li><i class="fas fa-check text-success"></i> API access</li>
+                    <li><i class="fas fa-check text-success"></i> White-label solutions</li>
+                    <li><i class="fas fa-check text-success"></i> Dedicated support</li>
+                </ul>
+                <button class="btn btn-secondary btn-lg w-full" onclick="startSubscription('elite')">
+                    Contact Sales
+                </button>
+            </div>
+        </div>
+        
+        <div class="text-center mt-12 scroll-reveal">
+            <p class="text-secondary mb-4">
+                🎯 <strong>7-day free trial</strong> on all plans • 💰 <strong>Money-back guarantee</strong> • 🔒 <strong>Cancel anytime</strong>
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section id="testimonials" class="py-20">
+    <div class="container">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold mb-6 scroll-reveal">
+                What Our Traders Say
+            </h2>
+            <p class="text-xl text-secondary max-w-3xl mx-auto scroll-reveal">
+                Join thousands of successful traders who trust our platform
+            </p>
+        </div>
+        
+        <div class="grid grid-3 gap-8">
+            <div class="testimonial-card hover-lift scroll-reveal" data-delay="100">
+                <div class="flex mb-4">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                </div>
+                <p class="text-secondary mb-4">
+                    "The AI signals are incredibly accurate. I've increased my trading profits by 150% in just 3 months using this platform."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">RS</div>
+                    <div>
+                        <div class="font-semibold">Rajesh Sharma</div>
+                        <div class="text-sm text-secondary">Professional Trader</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card hover-lift scroll-reveal" data-delay="200">
+                <div class="flex mb-4">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                </div>
+                <p class="text-secondary mb-4">
+                    "Best trading platform I've used. The paper trading feature helped me master strategies before risking real money."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">PK</div>
+                    <div>
+                        <div class="font-semibold">Priya Kapoor</div>
+                        <div class="text-sm text-secondary">Investment Advisor</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card hover-lift scroll-reveal" data-delay="300">
+                <div class="flex mb-4">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                </div>
+                <p class="text-secondary mb-4">
+                    "The real-time alerts and risk management tools have completely transformed my trading approach. Highly recommended!"
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">AM</div>
+                    <div>
+                        <div class="font-semibold">Anil Mehta</div>
+                        <div class="text-sm text-secondary">Swing Trader</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="text-center max-w-4xl mx-auto">
+            <h2 class="text-5xl font-bold mb-6 scroll-reveal">
+                Ready to Join the Elite?
+            </h2>
+            <p class="text-xl text-secondary mb-8 scroll-reveal">
+                Start your journey to profitable trading with our AI-powered platform. 
+                7-day free trial, no commitment required.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center scroll-reveal">
+                <button class="btn btn-primary btn-xl hover-lift btn-pulse" onclick="startSubscription('premium')">
+                    <i class="fas fa-rocket"></i>
+                    Start Free Trial Now
+                </button>
+                <a href="#" class="btn btn-ghost btn-xl hover-lift">
+                    <i class="fas fa-phone"></i>
+                    Talk to Expert
+                </a>
+            </div>
+            
+            <div class="mt-12 scroll-reveal">
+                <p class="text-sm text-secondary">
+                    ⚡ Setup in 2 minutes • 🛡️ Bank-level security • 📱 Works on all devices
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Animated counter for stats
+    function animateCounter(element, target) {
+        let current = 0;
+        const increment = target / 100;
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            element.textContent = Math.floor(current);
+        }, 20);
+    }
+    
+    // Initialize counters when in view
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px 0px -10% 0px'
+    };
+    
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                const target = parseFloat(entry.target.dataset.count);
+                animateCounter(entry.target, target);
+                entry.target.classList.add('animated');
+            }
+        });
+    }, observerOptions);
+    
+    document.querySelectorAll('[data-count]').forEach(el => {
+        counterObserver.observe(el);
+    });
+    
+    // Particle animation for hero background
+    function initParticles() {
+        const canvas = document.getElementById('hero-particles');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const particles = [];
+        const particleCount = window.innerWidth > 768 ? 50 : 25;
+        
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                size: Math.random() * 2 + 1,
+                opacity: Math.random() * 0.5 + 0.2
+            });
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                
+                if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 245, 255, ${particle.opacity})`;
+                ctx.fill();
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    }
+    
+    // Subscription handling
+    function startSubscription(plan) {
+        eliteFnOApp.showNotification(`Starting ${plan} subscription...`, 'info');
+        
+        // Create Razorpay order
+        fetch('/api/create-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                plan: plan,
+                amount: plan === 'basic' ? 999 : plan === 'premium' ? 2999 : 4999
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                initPayment(data.order);
+            } else {
+                eliteFnOApp.showNotification('Failed to create order. Please try again.', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            eliteFnOApp.showNotification('Something went wrong. Please try again.', 'error');
+        });
+    }
+    
+    function initPayment(orderData) {
+        if (typeof Razorpay === 'undefined') {
+            eliteFnOApp.showNotification('Payment system not loaded. Please refresh and try again.', 'error');
+            return;
+        }
+        
+        const options = {
+            key: orderData.key,
+            amount: orderData.amount,
+            currency: orderData.currency,
+            name: 'Elite FnO Trading',
+            description: `${orderData.plan} Plan Subscription`,
+            order_id: orderData.id,
+            handler: function(response) {
+                // Verify payment
+                fetch('/api/verify-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        eliteFnOApp.showNotification('Payment successful! Welcome to Elite FnO!', 'success');
+                        setTimeout(() => {
+                            window.location.href = '/dashboard';
+                        }, 2000);
+                    } else {
+                        eliteFnOApp.showNotification('Payment verification failed. Please contact support.', 'error');
+                    }
+                });
+            },
+            modal: {
+                ondismiss: function() {
+                    eliteFnOApp.showNotification('Payment cancelled', 'warning');
+                }
+            },
+            theme: {
+                color: '#00f5ff'
+            }
+        };
+        
+        const rzp = new Razorpay(options);
+        rzp.open();
+    }
+    
+    // Initialize particles on load
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(initParticles, 1000);
+    });
+</script>
+{% endblock %}

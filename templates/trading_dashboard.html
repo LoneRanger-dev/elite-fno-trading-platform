@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Signal Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen">
+        <!-- Navigation -->
+        <nav class="bg-indigo-600 text-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <span class="text-xl font-bold">Trading Signal Dashboard</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span id="systemStatus" class="px-3 py-1 rounded-full bg-green-500">
+                            System Active
+                        </span>
+                        <span id="connectionStatus" class="px-3 py-1 rounded-full bg-green-500">
+                            Connected
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-gray-500 text-sm font-medium">Signals Today</h3>
+                    <p class="text-2xl font-bold" id="signalsToday">0</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-gray-500 text-sm font-medium">Success Rate</h3>
+                    <p class="text-2xl font-bold" id="successRate">0%</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-gray-500 text-sm font-medium">Avg. Profit/Signal</h3>
+                    <p class="text-2xl font-bold" id="avgProfit">₹0</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-gray-500 text-sm font-medium">System Health</h3>
+                    <p class="text-2xl font-bold text-green-500" id="systemHealth">Good</p>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-gray-500 text-sm font-medium mb-4">Signal Performance</h3>
+                    <canvas id="performanceChart"></canvas>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-gray-500 text-sm font-medium mb-4">Strategy Distribution</h3>
+                    <canvas id="strategyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Signals Table -->
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-lg font-medium">Recent Signals</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Time
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Instrument
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Signal
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Entry
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Target
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Stop Loss
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Status
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200" id="signalsTable">
+                            <!-- Signals will be added here dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // WebSocket connection for real-time updates
+        const ws = new WebSocket('ws://' + window.location.host + '/ws/dashboard');
+        
+        ws.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            updateDashboard(data);
+        };
+
+        // Update dashboard with new data
+        function updateDashboard(data) {
+            // Update stats
+            document.getElementById('signalsToday').textContent = data.stats.signals_today;
+            document.getElementById('successRate').textContent = data.stats.success_rate + '%';
+            document.getElementById('avgProfit').textContent = '₹' + data.stats.avg_profit;
+            document.getElementById('systemHealth').textContent = data.system_health.status;
+
+            // Update system status
+            const systemStatus = document.getElementById('systemStatus');
+            systemStatus.className = data.system_active 
+                ? 'px-3 py-1 rounded-full bg-green-500'
+                : 'px-3 py-1 rounded-full bg-red-500';
+
+            // Update charts
+            updatePerformanceChart(data.performance_data);
+            updateStrategyChart(data.strategy_data);
+
+            // Update signals table
+            updateSignalsTable(data.recent_signals);
+        }
+
+        // Initialize charts
+        const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+        const performanceChart = new Chart(performanceCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Signal Performance',
+                    data: [],
+                    borderColor: 'rgb(99, 102, 241)',
+                    tension: 0.1
+                }]
+            }
+        });
+
+        const strategyCtx = document.getElementById('strategyChart').getContext('2d');
+        const strategyChart = new Chart(strategyCtx, {
+            type: 'doughnut',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: [
+                        'rgb(59, 130, 246)',
+                        'rgb(16, 185, 129)',
+                        'rgb(239, 68, 68)',
+                        'rgb(245, 158, 11)'
+                    ]
+                }]
+            }
+        });
+
+        // Update signals table
+        function updateSignalsTable(signals) {
+            const table = document.getElementById('signalsTable');
+            table.innerHTML = '';
+            
+            signals.forEach(signal => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${new Date(signal.timestamp).toLocaleTimeString()}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        ${signal.instrument}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${signal.signal_type}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${signal.entry_price}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${signal.target_price}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${signal.stop_loss}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full
+                            ${signal.status === 'SUCCESS' ? 'bg-green-100 text-green-800' :
+                              signal.status === 'ACTIVE' ? 'bg-blue-100 text-blue-800' :
+                              'bg-red-100 text-red-800'}">
+                            ${signal.status}
+                        </span>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>

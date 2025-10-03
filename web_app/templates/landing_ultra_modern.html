@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Elite FnO Trading Signals - Premium Options & Futures Trading Platform</title>
+    
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="Professional FnO Trading Signals with 85%+ Accuracy. Real-time Options & Futures alerts, Paper Trading, Multi-broker support. Join 10,000+ profitable traders!">
+    <meta name="keywords" content="FnO signals, options trading, futures trading, Nifty options, Bank Nifty, trading alerts, paper trading">
+    <meta name="author" content="Elite FnO Trading">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="🚀 Elite FnO Trading Signals - 85%+ Accuracy">
+    <meta property="og:description" content="Professional Options & Futures Trading Signals with Real-time Alerts">
+    <meta property="og:image" content="/static/images/og-image.jpg">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+    
+    <!-- External Libraries -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    
+    <style>
+        :root {
+            /* Color Palette */
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+            --danger-gradient: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+            
+            /* Glass Morphism Colors */
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            
+            /* Text Colors */
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --text-muted: rgba(255, 255, 255, 0.6);
+            
+            /* Background */
+            --bg-dark: #0a0a0f;
+            --bg-gradient: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+            
+            /* Animation Timings */
+            --animation-fast: 0.3s;
+            --animation-normal: 0.5s;
+            --animation-slow: 0.8s;
+            
+            /* Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 2rem;
+            --spacing-lg: 4rem;
+            --spacing-xl: 6rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Particle Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        /* 3D Canvas Background */
+        #threejs-canvas {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.4;
+        }
+
+        /* Glass Morphism Utilities */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 20px;
+        }
+
+        .glass-hover {
+            transition: all var(--animation-normal) ease;
+        }
+
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all var(--animation-normal) ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all var(--animation-fast) ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: width var(--animation-fast) ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            z-index: 10;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--success-gradient);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #667eea 50%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--success-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* CTA Buttons */
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all var(--animation-normal) ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--glass-bg);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Trust Indicators */
+        .trust-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+            opacity: 0.7;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .trust-item i {
+            color: #4CAF50;
+        }
+
+        /* Features Section */
+        .features {
+            padding: var(--spacing-xl) 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: var(--spacing-lg);
+        }
+
+        .feature-card {
+            padding: 2.5rem;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: opacity var(--animation-normal) ease;
+            z-index: -1;
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-benefits {
+            list-style: none;
+        }
+
+        .feature-benefits li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-benefits li i {
+            color: #4CAF50;
+            font-size: 0.8rem;
+        }
+
+        /* Live Signals Preview */
+        .signals-preview {
+            padding: var(--spacing-xl) 2rem;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .signals-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .signals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: var(--spacing-lg);
+        }
+
+        .signal-card {
+            padding: 2rem;
+            border-radius: 20px;
+            border-left: 4px solid;
+            position: relative;
+            animation: signalPulse 2s ease-in-out infinite;
+        }
+
+        .signal-card.bullish {
+            border-left-color: #4CAF50;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%);
+        }
+
+        .signal-card.bearish {
+            border-left-color: #f44336;
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.1) 0%, rgba(244, 67, 54, 0.05) 100%);
+        }
+
+        @keyframes signalPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(76, 175, 80, 0.4); }
+        }
+
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .signal-symbol {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .signal-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .signal-action {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .signal-action.buy {
+            color: #4CAF50;
+        }
+
+        .signal-action.sell {
+            color: #f44336;
+        }
+
+        .signal-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .signal-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .signal-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .signal-value {
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .confidence-meter {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .confidence-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: var(--success-gradient);
+            border-radius: 4px;
+            animation: fillAnimation 1.5s ease-out;
+        }
+
+        @keyframes fillAnimation {
+            from { width: 0; }
+            to { width: var(--confidence-width); }
+        }
+
+        .confidence-score {
+            font-weight: 700;
+            color: #4CAF50;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: var(--spacing-xl) 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: var(--spacing-lg);
+        }
+
+        .pricing-card {
+            padding: 3rem 2rem;
+            border-radius: 24px;
+            text-align: center;
+            position: relative;
+            border: 2px solid var(--glass-border);
+        }
+
+        .pricing-card.featured {
+            border-color: #667eea;
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-gradient);
+            padding: 0.5rem 2rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .pricing-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-period {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 0.8rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .pricing-features li i {
+            color: #4CAF50;
+            width: 16px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: var(--spacing-lg) 2rem var(--spacing-md);
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color var(--animation-fast) ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-muted);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-stats {
+                gap: 1.5rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .signals-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-gradient);
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+    
+    <!-- 3D Canvas Background -->
+    <canvas id="threejs-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                Elite FnO Trading
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#signals">Live Signals</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="/login" class="btn btn-secondary">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-fire"></i>
+                <span>🔥 10,000+ Active Traders</span>
+            </div>
+            
+            <h1 class="hero-title">
+                Elite FnO Trading Signals
+                <br>
+                <span style="background: var(--success-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">85%+ Accuracy</span>
+            </h1>
+            
+            <p class="hero-subtitle">
+                Professional Options & Futures trading signals powered by advanced algorithms, 
+                real-time market analysis, and expert insights. Join thousands of profitable traders 
+                and start your journey to financial freedom today.
+            </p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number" data-count="85">0</span>
+                    <span class="stat-label">Success Rate</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-count="10000">0</span>
+                    <span class="stat-label">Active Users</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-count="50">0</span>
+                    <span class="stat-label">Daily Signals</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-count="247">0</span>
+                    <span class="stat-label">Support</span>
+                </div>
+            </div>
+            
+            <div class="cta-buttons">
+                <a href="/register" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    Start Free Trial
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    <i class="fas fa-play"></i>
+                    Watch Demo
+                </a>
+            </div>
+            
+            <div class="trust-indicators">
+                <div class="trust-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>100% Secure</span>
+                </div>
+                <div class="trust-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Real-time Alerts</span>
+                </div>
+                <div class="trust-item">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Mobile Ready</span>
+                </div>
+                <div class="trust-item">
+                    <i class="fas fa-headset"></i>
+                    <span>24/7 Support</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <h2 class="section-title">🚀 Advanced Features</h2>
+            <p class="section-subtitle">
+                Cutting-edge technology meets professional trading expertise to deliver 
+                unmatched performance and results.
+            </p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card glass glass-hover">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3 class="feature-title">AI-Powered Signals</h3>
+                <p class="feature-description">
+                    Advanced machine learning algorithms analyze market patterns, 
+                    Open Interest, and technical indicators to generate high-probability trades.
+                </p>
+                <ul class="feature-benefits">
+                    <li><i class="fas fa-check"></i> Real-time OI Analysis</li>
+                    <li><i class="fas fa-check"></i> Multi-timeframe Scanning</li>
+                    <li><i class="fas fa-check"></i> Pattern Recognition</li>
+                    <li><i class="fas fa-check"></i> Risk Assessment</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card glass glass-hover">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="feature-title">Paper Trading</h3>
+                <p class="feature-description">
+                    Practice with virtual money, track your performance, and compete 
+                    with other traders in our gamified paper trading platform.
+                </p>
+                <ul class="feature-benefits">
+                    <li><i class="fas fa-check"></i> ₹1 Lakh Virtual Capital</li>
+                    <li><i class="fas fa-check"></i> Real-time P&L Tracking</li>
+                    <li><i class="fas fa-check"></i> Leaderboard Rankings</li>
+                    <li><i class="fas fa-check"></i> Performance Analytics</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card glass glass-hover">
+                <div class="feature-icon">
+                    <i class="fab fa-telegram"></i>
+                </div>
+                <h3 class="feature-title">Telegram Integration</h3>
+                <p class="feature-description">
+                    Get instant notifications on Telegram with rich formatting, 
+                    charts, and one-click paper trading execution.
+                </p>
+                <ul class="feature-benefits">
+                    <li><i class="fas fa-check"></i> Instant Alerts</li>
+                    <li><i class="fas fa-check"></i> Rich Formatting</li>
+                    <li><i class="fas fa-check"></i> Chart Images</li>
+                    <li><i class="fas fa-check"></i> Quick Actions</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card glass glass-hover">
+                <div class="feature-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <h3 class="feature-title">Multi-Broker Support</h3>
+                <p class="feature-description">
+                    Connect with Zerodha, Groww, Upstox, and Dhan. Automatic broker 
+                    detection with seamless API integration.
+                </p>
+                <ul class="feature-benefits">
+                    <li><i class="fas fa-check"></i> 4+ Broker APIs</li>
+                    <li><i class="fas fa-check"></i> Auto Detection</li>
+                    <li><i class="fas fa-check"></i> Real-time Data</li>
+                    <li><i class="fas fa-check"></i> Secure Connection</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card glass glass-hover">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3 class="feature-title">Modern UI/UX</h3>
+                <p class="feature-description">
+                    Beautiful, responsive design with glass morphism effects, 
+                    smooth animations, and intuitive user experience.
+                </p>
+                <ul class="feature-benefits">
+                    <li><i class="fas fa-check"></i> Glass Morphism</li>
+                    <li><i class="fas fa-check"></i> Dark Theme</li>
+                    <li><i class="fas fa-check"></i> Responsive Design</li>
+                    <li><i class="fas fa-check"></i> Smooth Animations</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card glass glass-hover">
+                <div class="feature-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3 class="feature-title">Premium Analytics</h3>
+                <p class="feature-description">
+                    Advanced portfolio analytics, risk management tools, 
+                    and detailed performance reports for serious traders.
+                </p>
+                <ul class="feature-benefits">
+                    <li><i class="fas fa-check"></i> P&L Analytics</li>
+                    <li><i class="fas fa-check"></i> Risk Metrics</li>
+                    <li><i class="fas fa-check"></i> Win Rate Tracking</li>
+                    <li><i class="fas fa-check"></i> Custom Reports</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Signals Preview -->
+    <section class="signals-preview" id="signals">
+        <div class="signals-container">
+            <div class="section-header">
+                <h2 class="section-title">🎯 Live Signals Preview</h2>
+                <p class="section-subtitle">
+                    See our AI-powered signals in action with real-time market analysis 
+                    and professional-grade trading recommendations.
+                </p>
+            </div>
+            
+            <div class="signals-grid">
+                <div class="signal-card glass bullish">
+                    <div class="signal-header">
+                        <div class="signal-symbol">NIFTY 22000 CE</div>
+                        <div class="signal-time">2 min ago</div>
+                    </div>
+                    <div class="signal-action buy">🚀 BUY CALL</div>
+                    <div class="signal-details">
+                        <div class="signal-item">
+                            <span class="signal-label">Entry:</span>
+                            <span class="signal-value">₹145.50</span>
+                        </div>
+                        <div class="signal-item">
+                            <span class="signal-label">Target:</span>
+                            <span class="signal-value">₹180.00</span>
+                        </div>
+                        <div class="signal-item">
+                            <span class="signal-label">Stop Loss:</span>
+                            <span class="signal-value">₹125.00</span>
+                        </div>
+                        <div class="signal-item">
+                            <span class="signal-label">Quantity:</span>
+                            <span class="signal-value">50 Lots</span>
+                        </div>
+                    </div>
+                    <div class="confidence-meter">
+                        <span>Confidence:</span>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="--confidence-width: 87%; width: 87%;"></div>
+                        </div>
+                        <span class="confidence-score">87%</span>
+                    </div>
+                </div>
+                
+                <div class="signal-card glass bearish">
+                    <div class="signal-header">
+                        <div class="signal-symbol">BANKNIFTY 45000 PE</div>
+                        <div class="signal-time">5 min ago</div>
+                    </div>
+                    <div class="signal-action sell">📉 BUY PUT</div>
+                    <div class="signal-details">
+                        <div class="signal-item">
+                            <span class="signal-label">Entry:</span>
+                            <span class="signal-value">₹235.75</span>
+                        </div>
+                        <div class="signal-item">
+                            <span class="signal-label">Target:</span>
+                            <span class="signal-value">₹310.00</span>
+                        </div>
+                        <div class="signal-item">
+                            <span class="signal-label">Stop Loss:</span>
+                            <span class="signal-value">₹200.00</span>
+                        </div>
+                        <div class="signal-item">
+                            <span class="signal-label">Quantity:</span>
+                            <span class="signal-value">25 Lots</span>
+                        </div>
+                    </div>
+                    <div class="confidence-meter">
+                        <span>Confidence:</span>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="--confidence-width: 92%; width: 92%;"></div>
+                        </div>
+                        <span class="confidence-score">92%</span>
+                    </div>
+                </div>
+                
+                <div class="signal-card glass bullish">
+                    <div class="signal-header">
+                        <div class="signal-symbol">NIFTY FUT</div>
+                        <div class="signal-time">8 min ago</div>
+                    </div>
+                    <div class="signal-action buy">📈 LONG FUTURE</div>
+                    <div class="signal-details">
+                        <div class="signal-item">
+                            <span class="signal-label">Entry:</span>
+                            <span class="signal-value">₹21,845</span>
+                        </div>
+                        <div class="signal-item">
+                            <span class="signal-label">Target:</span>
+                            <span class="signal-value">₹22,100</span>
+                        </div>
+                        <div class="signal-item">
+                            <span class="signal-label">Stop Loss:</span>
+                            <span class="signal-value">₹21,700</span>
+                        </div>
+                        <div class="signal-item">
+                            <span class="signal-label">Quantity:</span>
+                            <span class="signal-value">2 Lots</span>
+                        </div>
+                    </div>
+                    <div class="confidence-meter">
+                        <span>Confidence:</span>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="--confidence-width: 79%; width: 79%;"></div>
+                        </div>
+                        <span class="confidence-score">79%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <h2 class="section-title">💎 Choose Your Plan</h2>
+            <p class="section-subtitle">
+                Start with our free trial and upgrade to unlock premium features 
+                and advanced trading signals.
+            </p>
+        </div>
+        
+        <div class="pricing-grid">
+            <div class="pricing-card glass">
+                <h3 class="pricing-title">Free Trial</h3>
+                <div class="pricing-price">₹0</div>
+                <div class="pricing-period">7 Days Free</div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> 5 Signals per day</li>
+                    <li><i class="fas fa-check"></i> Paper Trading</li>
+                    <li><i class="fas fa-check"></i> Basic Analytics</li>
+                    <li><i class="fas fa-check"></i> Telegram Alerts</li>
+                    <li><i class="fas fa-check"></i> Community Access</li>
+                </ul>
+                <a href="/register" class="btn btn-secondary">Start Free Trial</a>
+            </div>
+            
+            <div class="pricing-card glass featured">
+                <h3 class="pricing-title">Premium</h3>
+                <div class="pricing-price">₹2,999</div>
+                <div class="pricing-period">per month</div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> Unlimited Signals</li>
+                    <li><i class="fas fa-check"></i> Advanced Paper Trading</li>
+                    <li><i class="fas fa-check"></i> Real-time OI Analysis</li>
+                    <li><i class="fas fa-check"></i> Multi-broker Support</li>
+                    <li><i class="fas fa-check"></i> Priority Support</li>
+                    <li><i class="fas fa-check"></i> Advanced Analytics</li>
+                    <li><i class="fas fa-check"></i> API Access</li>
+                </ul>
+                <a href="/register?plan=premium" class="btn btn-primary">Get Premium</a>
+            </div>
+            
+            <div class="pricing-card glass">
+                <h3 class="pricing-title">VIP Elite</h3>
+                <div class="pricing-price">₹9,999</div>
+                <div class="pricing-period">per month</div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> Everything in Premium</li>
+                    <li><i class="fas fa-check"></i> Live Trading Alerts</li>
+                    <li><i class="fas fa-check"></i> Personal Trading Coach</li>
+                    <li><i class="fas fa-check"></i> Custom Strategies</li>
+                    <li><i class="fas fa-check"></i> WhatsApp Support</li>
+                    <li><i class="fas fa-check"></i> Exclusive Webinars</li>
+                    <li><i class="fas fa-check"></i> Portfolio Review</li>
+                </ul>
+                <a href="/register?plan=vip" class="btn btn-primary">Get VIP Access</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Elite FnO Trading</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Professional Options & Futures trading platform with AI-powered signals 
+                    and advanced analytics for serious traders.
+                </p>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="#" style="color: var(--text-secondary); font-size: 1.5rem;"><i class="fab fa-telegram"></i></a>
+                    <a href="#" style="color: var(--text-secondary); font-size: 1.5rem;"><i class="fab fa-twitter"></i></a>
+                    <a href="#" style="color: var(--text-secondary); font-size: 1.5rem;"><i class="fab fa-youtube"></i></a>
+                    <a href="#" style="color: var(--text-secondary); font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#signals">Live Signals</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="/register">Sign Up</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="/help">Help Center</a></li>
+                    <li><a href="/contact">Contact Us</a></li>
+                    <li><a href="/api-docs">API Documentation</a></li>
+                    <li><a href="/tutorials">Video Tutorials</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul class="footer-links">
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms of Service</a></li>
+                    <li><a href="/disclaimer">Risk Disclaimer</a></li>
+                    <li><a href="/refund">Refund Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Elite FnO Trading. All rights reserved. | 
+            <span style="color: var(--text-secondary);">
+                Trading involves risk. Past performance is not indicative of future results.
+            </span></p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Loading Screen
+        window.addEventListener('load', function() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            setTimeout(() => {
+                loadingOverlay.classList.add('hidden');
+            }, 1500);
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Counter Animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number[data-count]');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-count'));
+                const duration = 2000;
+                const start = performance.now();
+                
+                function updateCounter(currentTime) {
+                    const elapsed = currentTime - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                    const current = Math.floor(easeOutQuart * target);
+                    
+                    if (counter.textContent.includes('%')) {
+                        counter.textContent = current + '%';
+                    } else if (target >= 1000) {
+                        counter.textContent = (current / 1000).toFixed(1) + 'K+';
+                    } else {
+                        counter.textContent = current + '+';
+                    }
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(updateCounter);
+                    }
+                }
+                
+                requestAnimationFrame(updateCounter);
+            });
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    
+                    // Trigger counter animation for hero stats
+                    if (entry.target.classList.contains('hero-stats')) {
+                        animateCounters();
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.feature-card, .signal-card, .pricing-card, .hero-stats');
+            
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+
+        // Particles.js Configuration
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: ["#667eea", "#764ba2", "#f093fb", "#f5576c"]
+                },
+                shape: {
+                    type: "circle"
+                },
+                opacity: {
+                    value: 0.5,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 2,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#667eea",
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "repulse"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 400,
+                        line_linked: {
+                            opacity: 1
+                        }
+                    },
+                    bubble: {
+                        distance: 400,
+                        size: 40,
+                        duration: 2,
+                        opacity: 8,
+                        speed: 3
+                    },
+                    repulse: {
+                        distance: 200,
+                        duration: 0.4
+                    },
+                    push: {
+                        particles_nb: 4
+                    },
+                    remove: {
+                        particles_nb: 2
+                    }
+                }
+            },
+            retina_detect: true
+        });
+
+        // Three.js 3D Background
+        function initThreeJS() {
+            const canvas = document.getElementById('threejs-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            
+            // Create floating geometric shapes
+            const geometries = [
+                new THREE.TetrahedronGeometry(1),
+                new THREE.OctahedronGeometry(1),
+                new THREE.IcosahedronGeometry(1)
+            ];
+            
+            const materials = [
+                new THREE.MeshBasicMaterial({ 
+                    color: 0x667eea, 
+                    wireframe: true, 
+                    transparent: true, 
+                    opacity: 0.3 
+                }),
+                new THREE.MeshBasicMaterial({ 
+                    color: 0x764ba2, 
+                    wireframe: true, 
+                    transparent: true, 
+                    opacity: 0.3 
+                }),
+                new THREE.MeshBasicMaterial({ 
+                    color: 0xf093fb, 
+                    wireframe: true, 
+                    transparent: true, 
+                    opacity: 0.3 
+                })
+            ];
+            
+            const meshes = [];
+            
+            for (let i = 0; i < 20; i++) {
+                const geometry = geometries[Math.floor(Math.random() * geometries.length)];
+                const material = materials[Math.floor(Math.random() * materials.length)];
+                const mesh = new THREE.Mesh(geometry, material);
+                
+                mesh.position.x = (Math.random() - 0.5) * 50;
+                mesh.position.y = (Math.random() - 0.5) * 50;
+                mesh.position.z = (Math.random() - 0.5) * 50;
+                
+                mesh.rotation.x = Math.random() * Math.PI;
+                mesh.rotation.y = Math.random() * Math.PI;
+                
+                scene.add(mesh);
+                meshes.push(mesh);
+            }
+            
+            camera.position.z = 30;
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                meshes.forEach((mesh, index) => {
+                    mesh.rotation.x += 0.005 + index * 0.001;
+                    mesh.rotation.y += 0.007 + index * 0.001;
+                    
+                    mesh.position.y += Math.sin(Date.now() * 0.001 + index) * 0.01;
+                });
+                
+                camera.position.x = Math.sin(Date.now() * 0.0005) * 5;
+                camera.position.y = Math.cos(Date.now() * 0.0005) * 5;
+                camera.lookAt(scene.position);
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Initialize 3D background after page load
+        window.addEventListener('load', initThreeJS);
+
+        // Signal cards real-time updates
+        function updateSignalPrices() {
+            const signalCards = document.querySelectorAll('.signal-card');
+            
+            signalCards.forEach(card => {
+                const priceElements = card.querySelectorAll('.signal-value');
+                
+                priceElements.forEach(element => {
+                    if (element.textContent.includes('₹')) {
+                        const currentPrice = parseFloat(element.textContent.replace('₹', '').replace(',', ''));
+                        const change = (Math.random() - 0.5) * 10; // Random price change
+                        const newPrice = Math.max(0, currentPrice + change);
+                        
+                        element.textContent = '₹' + newPrice.toFixed(2);
+                        
+                        // Add flash effect
+                        element.style.transition = 'color 0.3s ease';
+                        element.style.color = change > 0 ? '#4CAF50' : '#f44336';
+                        
+                        setTimeout(() => {
+                            element.style.color = '';
+                        }, 300);
+                    }
+                });
+            });
+        }
+
+        // Update signal prices every 3 seconds
+        setInterval(updateSignalPrices, 3000);
+
+        // Add typing effect to hero title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            type();
+        }
+
+        // Initialize typing effect when hero is visible
+        const heroObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const titleElement = entry.target.querySelector('.hero-title');
+                    if (titleElement && !titleElement.classList.contains('typed')) {
+                        titleElement.classList.add('typed');
+                        // Keep original title as fallback
+                    }
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                heroObserver.observe(hero);
+            }
+        });
+    </script>
+</body>
+</html>
